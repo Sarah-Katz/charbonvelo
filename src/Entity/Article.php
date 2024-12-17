@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
+#[ORM\HasLifecycleCallbacks ]
 class Article
 {
     #[ORM\Id]
@@ -22,7 +23,7 @@ class Article
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne]
@@ -34,6 +35,12 @@ class Article
      */
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'article')]
     private Collection $commentary;
+
+    #[ORM\PrePersist]
+    public function setCreateTime()
+    {
+        $this->date = new \DateTime();
+    }
 
     public function __construct()
     {
