@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MessageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,6 +34,17 @@ class Message
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(name: "article_id", referencedColumnName: "id_article")]
     private ?Article $article = null;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    private Collection $hasLiked;
+
+    public function __construct()
+    {
+        $this->hasLiked = new ArrayCollection();
+    }
 
     #[ORM\PrePersist]
     public function setCreateTime()
@@ -100,6 +113,30 @@ class Message
     public function setArticle(?Article $article): static
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getHasLiked(): Collection
+    {
+        return $this->hasLiked;
+    }
+
+    public function addHasLiked(User $hasLiked): static
+    {
+        if (!$this->hasLiked->contains($hasLiked)) {
+            $this->hasLiked->add($hasLiked);
+        }
+
+        return $this;
+    }
+
+    public function removeHasLiked(User $hasLiked): static
+    {
+        $this->hasLiked->removeElement($hasLiked);
 
         return $this;
     }
