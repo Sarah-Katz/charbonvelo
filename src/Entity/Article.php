@@ -37,6 +37,12 @@ class Article
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'article')]
     private Collection $comments;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    private Collection $hasLiked;
+
     #[ORM\PrePersist]
     public function setCreateTime()
     {
@@ -46,6 +52,7 @@ class Article
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->hasLiked = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -127,6 +134,30 @@ class Article
                 $comments->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getHasLiked(): Collection
+    {
+        return $this->hasLiked;
+    }
+
+    public function addHasLiked(User $hasLiked): static
+    {
+        if (!$this->hasLiked->contains($hasLiked)) {
+            $this->hasLiked->add($hasLiked);
+        }
+
+        return $this;
+    }
+
+    public function removeHasLiked(User $hasLiked): static
+    {
+        $this->hasLiked->removeElement($hasLiked);
 
         return $this;
     }
