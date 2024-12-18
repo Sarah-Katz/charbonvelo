@@ -23,13 +23,15 @@ class Message
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\JoinColumn(name: "subject_id", referencedColumnName: "id_subject")]
     private ?Subject $subject = null;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id_user", nullable: false)]
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentary')]
+    #[ORM\JoinColumn(name: "article_id", referencedColumnName: "id_article")]
     private ?Article $article = null;
 
     #[ORM\PrePersist]

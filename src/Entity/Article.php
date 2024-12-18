@@ -27,7 +27,7 @@ class Article
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id_user", nullable: false)]
     private ?User $author = null;
 
     /**
