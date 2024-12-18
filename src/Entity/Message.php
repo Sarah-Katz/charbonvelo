@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
-#[ORM\HasLifecycleCallbacks ]
+#[ORM\HasLifecycleCallbacks]
 class Message
 {
     #[ORM\Id]
@@ -30,7 +30,7 @@ class Message
     #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id_user", nullable: false)]
     private ?User $author = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commentary')]
+    #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(name: "article_id", referencedColumnName: "id_article")]
     private ?Article $article = null;
 
