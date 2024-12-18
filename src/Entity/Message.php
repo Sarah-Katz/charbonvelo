@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\MessageRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,7 +36,7 @@ class Message
     #[ORM\PrePersist]
     public function setCreateTime()
     {
-        $this->date = new \DateTime();
+        $this->date = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

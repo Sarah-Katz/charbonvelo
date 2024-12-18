@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Monolog\DateTimeImmutable;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -39,7 +40,7 @@ class Article
     #[ORM\PrePersist]
     public function setCreateTime()
     {
-        $this->date = new \DateTime();
+        $this->date = new \DateTimeImmutable();
     }
 
     public function __construct()
