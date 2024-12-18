@@ -3,12 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\MessageRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
-#[ORM\HasLifecycleCallbacks ]
+#[ORM\HasLifecycleCallbacks]
 class Message
 {
     #[ORM\Id]
@@ -23,19 +22,21 @@ class Message
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\JoinColumn(name: "subject_id", referencedColumnName: "id_subject")]
     private ?Subject $subject = null;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id_user", nullable: false)]
     private ?User $author = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commentary')]
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(name: "article_id", referencedColumnName: "id_article")]
     private ?Article $article = null;
 
     #[ORM\PrePersist]
     public function setCreateTime()
     {
-        $this->date = new \DateTime();
+        $this->date = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

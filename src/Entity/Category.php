@@ -22,17 +22,10 @@ class Category
      * @var Collection<int, Subject>
      */
     #[ORM\OneToMany(targetEntity: Subject::class, mappedBy: 'category')]
-    private Collection $subject;
-
-    /**
-     * @var Collection<int, Subject>
-     */
-    #[ORM\OneToMany(targetEntity: Subject::class, mappedBy: 'category')]
     private Collection $subjects;
 
     public function __construct()
     {
-        $this->subject = new ArrayCollection();
         $this->subjects = new ArrayCollection();
     }
 
@@ -58,13 +51,13 @@ class Category
      */
     public function getSubject(): Collection
     {
-        return $this->subject;
+        return $this->subjects;
     }
 
     public function addSubject(Subject $subject): static
     {
-        if (!$this->subject->contains($subject)) {
-            $this->subject->add($subject);
+        if (!$this->subjects->contains($subject)) {
+            $this->subjects->add($subject);
             $subject->setCategory($this);
         }
 
@@ -73,7 +66,7 @@ class Category
 
     public function removeSubject(Subject $subject): static
     {
-        if ($this->subject->removeElement($subject)) {
+        if ($this->subjects->removeElement($subject)) {
             // set the owning side to null (unless already changed)
             if ($subject->getCategory() === $this) {
                 $subject->setCategory(null);

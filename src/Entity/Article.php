@@ -7,9 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Monolog\DateTimeImmutable;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
-#[ORM\HasLifecycleCallbacks ]
+#[ORM\HasLifecycleCallbacks]
 class Article
 {
     #[ORM\Id]
@@ -27,24 +28,24 @@ class Article
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id_user", nullable: false)]
     private ?User $author = null;
 
     /**
      * @var Collection<int, Message>
      */
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'article')]
-    private Collection $commentary;
+    private Collection $comments;
 
     #[ORM\PrePersist]
     public function setCreateTime()
     {
-        $this->date = new \DateTime();
+        $this->date = new \DateTimeImmutable();
     }
 
     public function __construct()
     {
-        $this->commentary = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -103,27 +104,27 @@ class Article
     /**
      * @return Collection<int, Message>
      */
-    public function getCommentary(): Collection
+    public function getComments(): Collection
     {
-        return $this->commentary;
+        return $this->comments;
     }
 
-    public function addCommentary(Message $commentary): static
+    public function addComments(Message $comments): static
     {
-        if (!$this->commentary->contains($commentary)) {
-            $this->commentary->add($commentary);
-            $commentary->setArticle($this);
+        if (!$this->comments->contains($comments)) {
+            $this->comments->add($comments);
+            $comments->setArticle($this);
         }
 
         return $this;
     }
 
-    public function removeCommentary(Message $commentary): static
+    public function removeComments(Message $comments): static
     {
-        if ($this->commentary->removeElement($commentary)) {
+        if ($this->comments->removeElement($comments)) {
             // set the owning side to null (unless already changed)
-            if ($commentary->getArticle() === $this) {
-                $commentary->setArticle(null);
+            if ($comments->getArticle() === $this) {
+                $comments->setArticle(null);
             }
         }
 
