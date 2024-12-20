@@ -11,17 +11,17 @@ class Stage
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column("id_stage")]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null;
+    private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
+    #[ORM\Column(length: 255)]
+    private ?string $gpxLink = null;
 
     public function getId(): ?int
     {
@@ -40,27 +40,28 @@ class Stage
         return $this;
     }
 
-    public function getContent(): ?string
+    public function getDescription(): ?string
     {
-        return $this->content;
+        return $this->description;
     }
 
-    public function setContent(string $content): static
+    public function setDescription(string $description): static
     {
-        $this->content = $content;
+        $this->description = $description;
 
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getGpxLink(): ?string
     {
-        return $this->date;
+        return $this->gpxLink;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setGpxLink(string $gpxLink): static
     {
-        $this->date = $date;
+        $this->gpxLink = $gpxLink;
 
         return $this;
     }
+
 }
