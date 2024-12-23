@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SubjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Entity\Message;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,14 +14,14 @@ class Subject
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column("id_subject")]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
     private ?string $title = null;
 
     #[ORM\ManyToOne(inversedBy: 'subjects')]
-    #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id_category", nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
     /**

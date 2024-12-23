@@ -15,7 +15,7 @@ class Article
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column("id_article")]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
@@ -28,19 +28,21 @@ class Article
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id_user", nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
     /**
      * @var Collection<int, Message>
      */
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'article')]
+    #[ORM\JoinColumn(nullable: false)]
     private Collection $comments;
 
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: "likedArticle")]
+    #[ORM\JoinTable(name:"user_article")]
     private Collection $hasLiked;
 
     #[ORM\PrePersist]

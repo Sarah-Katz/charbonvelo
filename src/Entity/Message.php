@@ -14,7 +14,7 @@ class Message
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column("id_message")]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -24,21 +24,20 @@ class Message
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
-    #[ORM\JoinColumn(name: "subject_id", referencedColumnName: "id_subject")]
     private ?Subject $subject = null;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
-    #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id_user", nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(name: "article_id", referencedColumnName: "id_article")]
+    #[ORM\ManyToOne(targetEntity: Article::class, inversedBy: 'comments')]
     private ?Article $article = null;
 
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: "likedMessages")]
+    #[ORM\JoinTable(name:"user_message")]
     private Collection $hasLiked;
 
     public function __construct()

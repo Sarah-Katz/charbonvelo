@@ -1,0 +1,24 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="text-center">
+            <h1 class="welcome-title">Bienvenue sur le panel administrateur de VéloCharbon 🚴‍♂️</h1>
+            <p>Gérez facilement le contenu et les fonctionnalités de votre site :</p>
+            <ul class="list-unstyled">
+                <li>• Articles</li>
+                <li>• Catégories</li>
+                <li>• Messages</li>
+                <li>• Stages</li>
+                <li>• Sujets</li>
+                <li>• Utilisateurs</li>
+            </ul>
+            <p>Votre tableau de bord central pour garder tout sous contrôle.</p>
+        </div>
+    </div>
+{% endblock %}

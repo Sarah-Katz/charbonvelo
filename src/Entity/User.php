@@ -15,7 +15,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column("id_user")]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
     #[ORM\Column(length: 30)]
@@ -36,9 +36,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'author')]
     private Collection $messages;
 
+    /**
+     * @var Collection<int, Message>
+     */
+    #[ORM\ManyToMany(targetEntity: Message::class, mappedBy: 'hasLiked')]
+    private Collection $likedMessages;
+
+        /**
+     * @var Collection<int, Article>
+     */
+    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'hasLiked')]
+    private Collection $likedArticle;
+
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
+        $this->likedMessages = new ArrayCollection();
+        $this->likedArticle = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -123,6 +138,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($message->getAuthor() === $this) {
                 $message->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getLikedMessages(): Collection
+    {
+        return $this->likedMessages;
+    }
+
+    public function addLikedMessage(Message $message): static
+    {
+        if (!$this->likedMessages->contains($message)) {
+            $this->likedMessages->add($message);
+            $message->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLikedMessage(Message $message): static
+    {
+        if ($this->likedMessages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getAuthor() === $this) {
+                $message->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+/**
+     * @return Collection<int, Article>
+     */
+    public function getLikedArticle(): Collection
+    {
+        return $this->likedArticle;
+    }
+
+    public function addLikedArticle(Article $article): static
+    {
+        if (!$this->likedArticle->contains($article)) {
+            $this->likedArticle->add($article);
+            $article->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLikedArticle(Article $article): static
+    {
+        if ($this->likedArticle->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getAuthor() === $this) {
+                $article->setAuthor(null);
             }
         }
 
