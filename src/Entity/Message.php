@@ -36,7 +36,7 @@ class Message
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: "likedMessages")]
     #[ORM\JoinTable(name:"user_message")]
     private Collection $hasLiked;
 

@@ -41,7 +41,7 @@ class Article
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: "likedArticle")]
     #[ORM\JoinTable(name:"user_article")]
     private Collection $hasLiked;
 

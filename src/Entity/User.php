@@ -39,13 +39,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Message>
      */
-    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'hasLiked')]
+    #[ORM\ManyToMany(targetEntity: Message::class, mappedBy: 'hasLiked')]
     private Collection $likedMessages;
 
         /**
      * @var Collection<int, Article>
      */
-    #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'hasLiked')]
+    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'hasLiked')]
     private Collection $likedArticle;
 
 
