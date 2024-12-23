@@ -1,0 +1,43 @@
+.text-center {
+    text-align: center;
+}
+
+.welcome-title {
+    font-size: 2rem; /* Agrandi légèrement pour un titre principal */
+    margin-bottom: 1rem; /* Ajoute de l'espacement sous le titre */
+    color: #333; /* Assure un contraste lisible */
+}
+
+.vh-100 {
+    height: 100vh;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+ul.list-unstyled {
+    list-style: none; /* Supprime les puces par défaut */
+    padding: 0;
+    margin: 1rem 0; /* Ajoute un espacement autour de la liste */
+    font-size: 1.2rem; /* Taille lisible */
+    color: #555; /* Couleur un peu plus douce pour le texte */
+}
+
+ul.list-unstyled li {
+    margin-bottom: 0.5rem; /* Espacement entre chaque élément */
+}
+
+p {
+    font-size: 1rem;
+    color: #666; /* Couleur neutre pour les paragraphes */
+    margin-top: 1rem;
+}
