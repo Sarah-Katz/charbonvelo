@@ -3,10 +3,62 @@
 {% block title %}Accueil | VéloCharbon{% endblock %}
 
 {% block body %}
-<div class="container text-center mt-5">
-    <h1 class="welcome-title">Bienvenue sur VéloCharbon 🚴‍♂️</h1>
-    <p class="lead mt-3">
-        Découvrez notre univers dédié aux passionnés de vélo : articles, trajets, sujets, et bien plus encore !
-    </p>
+<div class="container mx-auto">
+    <!-- Section principale avec une image bannière -->
+    <div class="relative">
+        <img src="/path/to/banner-image.jpg" alt="Cyclistes en action" class="w-full h-64 object-cover">
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 mt-4 bg-secondary text-white px-4 py-2 rounded">
+        </div>
+    </div>
+
+    <!-- Titre principal et description -->
+    <div class="text-center py-8">
+        <h1 class="text-3xl font-bold text-primary">La Vélocharbon, les trajets des Hauts-de-France à vélo</h1>
+        <p class="text-gray-600 mt-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam. Vivamus et vehicula eros tristique lacus.
+        </p>
+        <p class="text-gray-600 mt-2">
+            Natus id id sint illum. Pellentesque tristique facilisis libero, non accumsan arcu vehicula sit amet. Ut at magna eget ligula dignissim congue. Donec a ipsum quis arcu efficitur.
+        </p>
+    </div>
+
+    <!-- Section Actualités -->
+    <div class="grid grid-cols-3 gap-6 py-8">
+        <!-- Colonne actualités -->
+        <div class="col-span-1">
+            <h2 class="text-xl font-bold text-primary mb-4">Actualités</h2>
+            <p class="text-gray-600">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas euismod enim a metus faucibus.
+            </p>
+        </div>
+
+        <!-- Miniatures -->
+        <div class="col-span-2 grid grid-cols-3 gap-4">
+            {% for i in 1..6 %}
+                <div class="relative">
+                    <img src="/path/to/thumbnail.jpg" alt="Actualité {{ i }}" class="w-full h-32 object-cover">
+                    <div class="absolute bottom-0 bg-black bg-opacity-50 text-white px-2 py-1 w-full text-center">
+                        Titre de l'article
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Carte et itinéraire -->
+    <div class="grid grid-cols-3 gap-6 py-8">
+        <!-- Carte -->
+        <div class="col-span-2">
+            <img src="/path/to/map-image.jpg" alt="Carte des itinéraires" class="w-full h-auto">
+        </div>
+
+        <!-- Itinéraire -->
+        <div class="col-span-1">
+            <h2 class="text-xl font-bold text-primary mb-4">Itinéraire</h2>
+            <p class="text-gray-600">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.
+            </p>
+        </div>
+    </div>
 </div>
 {% endblock %}
