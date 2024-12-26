@@ -3,25 +3,49 @@
 {% block title %}{{ article.getTitle() }} | Vélocharbon{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="bg-background w-full h-full text-text">
+    <div class="w-full max-h-96 overflow-hidden">
+        {# Center the image vertically #}
+        <img src="{{ asset('images/article.webp') }}" class="w-full object-cover h-96"></img>
+    </div>
 
-<div class="example-wrapper">
-    <h2>{{ article.getTitle() }}</h2>
-    <p>{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
-    <p>{{ article.getContent()|raw }}</p>
 
-    <h2>Commentaires</h2>
-    {% set allComments = article.getComments() %}
-    {% if allComments|length > 0 %}
-        {% for comment in allComments %}
-            <p>{{ comment.getAuthor().getUsername() }} - {{ comment.getDate()|date("d/m/Y H:i") }}</p>
-            <p>{{ comment.getContent()|raw }}</p>
-        {% endfor %}
-    {% else %}
-        <p>Aucun commentaire pour l'instant...</p>
-    {% endif %}
+    <div class="p-8 mx-auto max-w-screen-2xl">
+        {# Article Title and Info #}
+        <h2 class="text-primary text-4xl font-bold mb-4">{{ article.getTitle() }}</h2>
+        <p class="text-gray-600 mb-4">{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
+        <p class="text-text leading-relaxed mb-6">{{ article.getContent()|raw }}</p>
+    </div>
+
+
+    {# Comments Section #}
+    <div class="p-8 bg-neutral-100">
+        <div class="p-0 gap-5 m-10 mx-auto max-w-7xl">
+            <h2 class="text-primary text-4xl font-bold mb-4">Commentaires</h2>
+            {% set allComments = article.getComments() %}
+            <div class="space-y-6">
+                {% if allComments|length > 0 %}
+                    {% for comment in allComments %}
+                        <div class="border rounded-md p-4 bg-gray-50">
+                            <p class="text-gray-700 font-semibold">{{ comment.getAuthor().getUsername() }} - {{ comment.getDate()|date("d/m/Y H:i") }}</p>
+                            <p class="text-gray-800">{{ comment.getContent()|raw }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-gray-600">Aucun commentaire pour l'instant...</p>
+                {% endif %}
+            </div>
+
+            {# Add Comment Section #}
+            {# Action example: {{ path('add_comment', {id: article.getId()}) }} #}
+            <form method="POST" action="" class="mt-6">
+                <label for="comment" class="block text-gray-700 font-semibold mb-2">Nom d'Utilisateur</label>
+                <input type="text" id="username" name="username" class="w-full border rounded-md p-2 mb-4" placeholder="Entrez votre nom">
+                <textarea id="comment" name="comment" rows="4" class="w-full border rounded-md p-2 mb-4" placeholder="Votre commentaire..."></textarea>
+                <button type="submit" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-dark">Envoyer</button>
+            </form> 
+        </div>
+    </div>
 </div>
 {% endblock %}
+
