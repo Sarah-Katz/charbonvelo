@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.getTitle() }} | Vélocharbon{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h2>{{ article.getTitle() }}</h2>
+    <p>{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
+    <p>{{ article.getContent()|raw }}</p>
+
+    <h2>Commentaires</h2>
+    {% set allComments = article.getComments() %}
+    {% if allComments|length > 0 %}
+        {% for comment in allComments %}
+            <p>{{ comment.getAuthor().getUsername() }} - {{ comment.getDate()|date("d/m/Y H:i") }}</p>
+            <p>{{ comment.getContent()|raw }}</p>
+        {% endfor %}
+    {% else %}
+        <p>Aucun commentaire pour l'instant...</p>
+    {% endif %}
+</div>
+{% endblock %}
