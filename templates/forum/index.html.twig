@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des catégories{% endblock %}
+
+{% block body %}
+<div class="container shadow rounded mx-auto my-4 px-4 py-8">
+    <h1 class="text-2xl font-semibold mb-6">Liste des catégories</h1>
+    <div class="bg-white shadow rounded-lg px-4">
+        <ul class="divide-y divide-gray-200">
+            {% for category in categories %}
+                <li class="py-4 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-lg font-semibold">{{ category.title }}</h2>
+                        {% set lastSubject = category.subjects|first %}
+                        {% if lastSubject %}
+                            <p>
+                                <span class="text-accent font-bold text-sm">Dernier sujet:</span> 
+                                {# TODO: Change this to a link to the subject #}
+                                {{ lastSubject.title }}
+                            </p>
+                        {% else %}
+                            <p class="text-gray-500 text-sm">Aucun sujet dans cette catégorie</p>
+                        {% endif %}
+                    </div>
+                    {# <a href="{{ path('category_show', {'id': category.id}) }}" class="text-yellow-500 hover:text-yellow-600"> #}
+                        {# <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> #}
+                            {# <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /> #}
+                        {# </svg> #}
+                    {# </a> #}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
