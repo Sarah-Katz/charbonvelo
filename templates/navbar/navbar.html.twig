@@ -21,17 +21,23 @@
         </ul>
 
         <!-- Button -->
-<div>
-    {% if app.user %}
-        <a href="{{ path('app_logout') }}" class="px-4 py-2 text-sm font-medium text-white bg-accent rounded hover:bg-secondary">
-            Se déconnecter
-        </a>
-    {% else %}
-        <a href="{{ path('app_login') }}" class="px-4 py-2 text-sm font-medium text-white bg-secondary rounded hover:bg-accent">
-            Se connecter
-        </a>
-    {% endif %}
-</div>
+        <div class="flex space-x-4">
+            {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin') }}" class="mr-6 px-4 py-2 text-sm font-medium text-white bg-secondary rounded hover:bg-accent">
+                Panel Admin
+            </a>
+            {% endif %}
+
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}" class="ml-6 px-4 py-2 text-sm font-medium text-white bg-accent rounded hover:bg-secondary">
+                    Se déconnecter
+                </a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="px-4 py-2 text-sm font-medium text-white bg-secondary rounded hover:bg-accent">
+                    Se connecter
+                </a>
+            {% endif %}
+        </div>
     </nav>
 </body>
 </html>
