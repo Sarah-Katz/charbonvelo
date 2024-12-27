@@ -51,7 +51,11 @@ class Category
      */
     public function getSubject(): Collection
     {
-        return $this->subjects;
+        $sortedSubjects = $this->subjects->toArray();
+        usort($sortedSubjects, function (Subject $a, Subject $b) {
+            return $b->getMessages()->first()->getDate()->getTimestamp() - $a->getMessages()->first()->getDate()->getTimestamp();
+        });
+        return new ArrayCollection($sortedSubjects);
     }
 
     public function addSubject(Subject $subject): static
