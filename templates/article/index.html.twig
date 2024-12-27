@@ -3,47 +3,77 @@
 {% block title %}{{ article.getTitle() }} | Vélocharbon{% endblock %}
 
 {% block body %}
-<div class="bg-background w-full h-full text-text">
+<div class="bg-background w-full h-full text-text text-base">
     <div class="w-full max-h-96 overflow-hidden">
         {# Center the image vertically #}
         <img src="{{ asset('images/article.webp') }}" class="w-full object-cover h-96"></img>
     </div>
 
 
-    <div class="p-8 mx-auto max-w-screen-2xl">
+    <div class="p-8 mx-auto max-w-screen-2xl flex flex-col gap-3">
         {# Article Title and Info #}
-        <h2 class="text-primary text-4xl font-bold mb-4">{{ article.getTitle() }}</h2>
-        <p class="text-gray-600 mb-4">{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
-        <p class="text-text leading-relaxed mb-6">{{ article.getContent()|raw }}</p>
+        <h2 class="text-primary text-4xl font-medium">{{ article.getTitle() }}</h2>
+        <p class="text-gray-600">{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
+        <p class="text-text leading-relaxed">{{ article.getContent()|raw }}</p>
+
+        {# TODO: Make the like button actually trigger the Like logic. #}
+        {# TODO: Should change it to be filled if the user has liked the post. #}
+        <button type="submit" class="self-center fill-none hover:fill-primary stroke-primary">
+            <svg width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.16658 10.3333V23.6666M7.16658 10.3333L1.83325 10.3333V23.6666H7.16658M7.16658 10.3333L14.094 2.25125C14.7514 1.48436 15.7855 1.15468 16.7655 1.39965L16.8288 1.41551C18.6179 1.86277 19.4238 3.94739 18.401 5.48176L15.1666 10.3333H21.2471C22.9299 10.3333 24.192 11.8728 23.862 13.5229L22.262 21.5229C22.0127 22.7694 20.9183 23.6666 19.6471 23.6666H7.16658" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
     </div>
 
 
     {# Comments Section #}
-    <div class="p-8 bg-neutral-100">
-        <div class="p-0 gap-5 m-10 mx-auto max-w-7xl">
-            <h2 class="text-primary text-4xl font-bold mb-4">Commentaires</h2>
+    <div class="px-5 py-8 xl:p-8 bg-neutral-100">
+        <div class="mx-auto max-w-7xl flex flex-col gap-5 ">
+            <h2 class="text-primary text-4xl font-medium">Commentaires</h2>
+
+            {# Add Comment Section #}
+            {# TODO: Add action (link) #}
+            {# TODO: Only display if user is authenticated #}
+            {# TODO: Show the user's username #}
+            {# TODO: Make the comment textbox the WYSIWYG box #}
+            {# Action example: {{ path('add_comment', {id: article.getId()}) }} #}
+            <form method="POST" action="" class="flex flex-col drop-shadow-lg bg-background p-4 rounded-lg gap-1">
+                <label for="comment" class="text-primary font-semibold text-xl">Nom d'Utilisateur</label>
+
+                <div class="w-full rounded-lg p-3 drop-shadow-lg bg-white border flex flex-col">
+                    <textarea id="comment" name="comment" rows="4"
+                        placeholder="Votre commentaire..."
+                    > </textarea>
+                    <button type="submit"
+                        class="bg-secondary text-primary py-2 px-4 rounded-full hover:bg-primary hover:text-white_text font-medium self-end"
+                    >
+                    Envoyer
+                    </button>
+                </div>
+            </form> 
+
+            {# All comments #}
             {% set allComments = article.getComments() %}
             <div class="space-y-6">
                 {% if allComments|length > 0 %}
                     {% for comment in allComments %}
-                        <div class="border rounded-md p-4 bg-gray-50">
-                            <p class="text-gray-700 font-semibold">{{ comment.getAuthor().getUsername() }} - {{ comment.getDate()|date("d/m/Y H:i") }}</p>
-                            <p class="text-gray-800">{{ comment.getContent()|raw }}</p>
+                        <div class="rounded-md p-4 bg-background drop-shadow-lg flex flex-col gap-1">
+                            <p class="text-primary font-semibold text-xl">{{ comment.getAuthor().getUsername() }}</p>
+                            <p class="text-xs">{{ comment.getDate()|date("d/m/Y H:i") }}</p>
+                            <p class="">{{ comment.getContent()|raw }}</p>
+                            {# TODO: Make the like button actually trigger the Like logic. #}
+                            {# TODO: Should change it to be filled if the user has liked the comment. #}
+                            <button type="submit" class="fill-none hover:fill-primary stroke-primary">
+                                <svg width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.16658 10.3333V23.6666M7.16658 10.3333L1.83325 10.3333V23.6666H7.16658M7.16658 10.3333L14.094 2.25125C14.7514 1.48436 15.7855 1.15468 16.7655 1.39965L16.8288 1.41551C18.6179 1.86277 19.4238 3.94739 18.401 5.48176L15.1666 10.3333H21.2471C22.9299 10.3333 24.192 11.8728 23.862 13.5229L22.262 21.5229C22.0127 22.7694 20.9183 23.6666 19.6471 23.6666H7.16658" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
                         </div>
                     {% endfor %}
                 {% else %}
                     <p class="text-gray-600">Aucun commentaire pour l'instant...</p>
                 {% endif %}
             </div>
-
-            {# Add Comment Section #}
-            {# Action example: {{ path('add_comment', {id: article.getId()}) }} #}
-            <form method="POST" action="" class="mt-6">
-                <label for="comment" class="block text-gray-700 font-semibold mb-2">Nom d'Utilisateur</label>
-                <input type="text" id="username" name="username" class="w-full border rounded-md p-2 mb-4" placeholder="Entrez votre nom">
-                <textarea id="comment" name="comment" rows="4" class="w-full border rounded-md p-2 mb-4" placeholder="Votre commentaire..."></textarea>
-                <button type="submit" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-dark">Envoyer</button>
-            </form> 
         </div>
     </div>
 </div>
