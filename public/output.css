@@ -921,6 +921,11 @@ video {
   border-color: rgb(185 28 28 / var(--tw-border-opacity, 1));
 }
 
+.bg-accent {
+  --tw-bg-opacity: 1;
+  background-color: rgb(206 57 57 / var(--tw-bg-opacity, 1));
+}
+
 .bg-black {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
@@ -944,11 +949,6 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
-}
-
-.bg-accent {
-  --tw-bg-opacity: 1;
-  background-color: rgb(206 57 57 / var(--tw-bg-opacity, 1));
 }
 
 .bg-opacity-50 {
