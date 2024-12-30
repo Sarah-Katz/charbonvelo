@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Forum - {{ category.title }}
+{% endblock %}
+
+{% block body %}
+  <div class="container mx-auto my-4 px-4 py-8">
+    <h1 class="text-3xl font-semibold mb-6">Catégorie > {{ category.title }}</h1>
+    <div class="bg-white shadow rounded-lg px-4">
+      <ul class="divide-y divide-gray-200 cursor-pointer">
+        {% for subject in category.subject %}
+          {% set firstMessage = subject.messages|first %}
+          <li class="py-4">
+          {# TODO: Change this to a link to the subject #}
+          <a href="#">
+            <h2 class="text-2xl font-semibold">{{ subject.title }}</h2>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <div>Par {{ firstMessage.author.username }}</div>
+              </div>
+              <div class="test-sm">le {{ firstMessage.date|date('d/m/Y à H:i') }}</div>
+            </div>
+            <p class="text-gray-800">
+              {{ firstMessage.content|slice(0, 100) }}{% if (firstMessage.content|length) > 100 %}...{% endif %}
+            </p>
+          </a>
+          </li>
+        {% else %}
+          <p class="py-4 text-gray-500">Aucun sujet dans cette catégorie.</p>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}

@@ -6,6 +6,7 @@ use App\Repository\SubjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Message;
+use Doctrine\Common\Collections\Criteria;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -69,7 +70,10 @@ class Subject
      */
     public function getMessages(): Collection
     {
-        return $this->messages;
+        $criteria = Criteria::create()
+            ->orderBy(['date' => Criteria::ASC]);
+
+        return $this->messages->matching($criteria);
     }
 
     public function addMessage(Message $message): static

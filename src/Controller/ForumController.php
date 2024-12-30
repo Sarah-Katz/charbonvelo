@@ -23,4 +23,13 @@ class ForumController extends AbstractController
             'categories' => $categories,
         ]);
     }
+
+    #[Route('/forum/{category}', name: 'app_category_show')]
+    public function showCategory(Category $category): Response
+    {
+        return $this->render('forum/category.html.twig', [
+            'controller_name' => 'ForumController',
+            'category' => $category,
+        ]);
+    }
 }
