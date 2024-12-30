@@ -34,25 +34,27 @@
             <h2 class="text-primary text-4xl font-medium">Commentaires</h2>
 
             {# Add Comment Section #}
-            {# TODO: Add action (link) #}
-            {# TODO: Only display if user is authenticated #}
-            {# TODO: Show the user's username #}
-            {# TODO: Make the comment textbox the WYSIWYG box #}
-            {# Action example: {{ path('add_comment', {id: article.getId()}) }} #}
-            <form method="POST" action="" class="flex flex-col drop-shadow-lg bg-background p-4 rounded-lg gap-1">
-                <label for="comment" class="text-primary font-semibold text-xl">Nom d'Utilisateur</label>
+            {% if is_granted("ROLE_USER") %}
+                {# TODO: Add action (link) #}
+                {# TODO: Make the comment textbox the WYSIWYG box #}
+                {# Action example: {{ path('add_comment', {id: article.getId()}) }} #}
+                <form method="POST" action="" class="flex flex-col drop-shadow-lg bg-background p-4 rounded-lg gap-1">
+                    <label for="comment" class="text-primary font-semibold text-xl">{{ app.user.username }}</label>
 
-                <div class="w-full rounded-lg p-3 drop-shadow-lg bg-white border flex flex-col">
-                    <textarea id="comment" name="comment" rows="4"
-                        placeholder="Votre commentaire..."
-                    > </textarea>
-                    <button type="submit"
-                        class="bg-secondary text-primary py-2 px-4 rounded-full hover:bg-primary hover:text-white_text font-medium self-end"
-                    >
-                    Envoyer
-                    </button>
-                </div>
-            </form> 
+                    <div class="w-full rounded-lg p-3 drop-shadow-lg bg-white border flex flex-col">
+                        <textarea id="comment" name="comment" rows="4"
+                            placeholder="Votre commentaire..."
+                        > </textarea>
+                        <button type="submit"
+                            class="bg-secondary text-primary py-2 px-4 rounded-full hover:bg-primary hover:text-white_text font-medium self-end"
+                        >
+                        Envoyer
+                        </button>
+                    </div>
+                </form> 
+            {% else %}
+                <p>Veuillez vous <a class="text-accent font-semibold underline" href="{{ path('app_login') }}">connecter</a> pour envoyer un commentaire.</p>
+            {% endif %}
 
             {# All comments #}
             {% set allComments = article.getComments() %}
