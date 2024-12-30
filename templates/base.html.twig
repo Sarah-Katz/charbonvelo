@@ -20,14 +20,15 @@
       <script src="https://cdn.tailwindcss.com"></script>
     {% endblock %}
   </head>
-  <body>
+  <body class="flex flex-col h-screen">
     <!-- Navbar -->
     {% include 'navbar/navbar.html.twig' %}
 
     <!-- Contenu principal -->
+    <main class="mb-auto">
     {% block body %}
-
     {% endblock %}
+    </main>
 
     <!-- Footer -->
     {% include 'footer/footer.html.twig' %}
