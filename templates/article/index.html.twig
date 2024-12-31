@@ -74,7 +74,7 @@
                                 {{ include('like_button.html.twig',
                                     {
                                         'hasLiked': comment in app.user.likedMessages,
-                                        'actionPath': path('like_article', {id: article.getId()})
+                                        'actionPath': path('like_article_comment', {id: article.getId(), commentId: comment.getId()})
                                     })
                                 }}
                             {% endif %}
