@@ -35,14 +35,11 @@
 
             {# Add Comment Section #}
             {% if is_granted("ROLE_USER") %}
-                {# TODO: Add action (link) #}
-                {# TODO: Make the comment textbox the WYSIWYG box #}
-                {# Action example: {{ path('add_comment', {id: article.getId()}) }} #}
-                <form method="POST" action="" class="flex flex-col drop-shadow-lg bg-background p-4 rounded-lg gap-1">
-                    <label for="comment" class="text-primary font-semibold text-xl">{{ app.user.username }}</label>
+                <form method="POST" action="{{ path('add_comment', {articleId: article.getId()}) }}" class="flex flex-col drop-shadow-lg bg-background p-4 rounded-lg gap-1">
+                    <label for="content" class="text-primary font-semibold text-xl">{{ app.user.username }}</label>
 
                     <div class="w-full rounded-lg p-3 drop-shadow-lg bg-white border flex flex-col">
-                        <textarea id="comment" name="comment" rows="4"
+                        <textarea id="content" name="content" rows="4"
                             placeholder="Votre commentaire..."
                         > </textarea>
                         <button type="submit"
@@ -67,7 +64,7 @@
                                 <p class="text-primary font-semibold text-xl">{{ comment.getAuthor().getUsername() }}</p>
                                 <p class="text-xs">{{ comment.getDate()|date("d/m/Y H:i") }}</p>
                             </div>
-                            <p class="">{{ comment.getContent()|raw }}</p>
+                            <p class="">{{ comment.getContent() }}</p>
                             
                             {{ include('like_button.html.twig',
                                 {

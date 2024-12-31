@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -24,6 +26,43 @@ class ArticleController extends AbstractController
         return $this->render('article/index.html.twig', [
             'article' => $article,
         ]);
+    }
+
+    #[Route('/comment/{articleId}', name: 'add_comment', methods: ["POST"])]
+    public function addComment(
+        int $articleId,
+        Request $request,
+        ArticleRepository $articleRepo,
+        EntityManagerInterface $entityManager
+        ): Response
+    {
+        $user = $this->getUser();
+        if (!isset($user)) { return $this->redirectToRoute("app_login"); }
+        
+        $article = $articleRepo->find($articleId);
+        if (!isset($article)) { $this->redirectToRoute("app_home"); }
+
+
+        $content = $request->get('content');
+
+        // For some reason, an empty content is of length one ?...
+        if (!isset($content) || strlen($content) <= 1) {
+            return new Response(
+                "Content is empty",
+                Response::HTTP_BAD_REQUEST                
+            );
+        }
+        
+        
+        $comment = new Message();
+        $comment->setAuthor($user);
+        $comment->setArticle($article);
+        $comment->setContent($content);
+
+        $entityManager->persist($comment);
+        $entityManager->flush();
+
+        return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $articleId]);
     }
 
     #[Route('/like/article/{id}', name: 'like_article', methods: ["POST"])]
