@@ -17,13 +17,15 @@
             <p class="text-gray-600">{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
             <p class="text-text leading-relaxed">{{ article.getContent()|raw }}</p>
 
-            {# TODO: Make the like button actually trigger the Like logic. #}
-            {# TODO: Should change it to be filled if the user has liked the post. #}
-            <button type="submit" class="self-center xl:self-start fill-none hover:fill-primary stroke-primary">
-                <svg width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.16658 10.3333V23.6666M7.16658 10.3333L1.83325 10.3333V23.6666H7.16658M7.16658 10.3333L14.094 2.25125C14.7514 1.48436 15.7855 1.15468 16.7655 1.39965L16.8288 1.41551C18.6179 1.86277 19.4238 3.94739 18.401 5.48176L15.1666 10.3333H21.2471C22.9299 10.3333 24.192 11.8728 23.862 13.5229L22.262 21.5229C22.0127 22.7694 20.9183 23.6666 19.6471 23.6666H7.16658" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
+            {# TODO: Find a way to avoid double checking is granted, or pass a variable #}
+            {% if is_granted("ROLE_USER") %}
+                {{ include('like_button.html.twig',
+                    {
+                        'hasLiked': article in app.user.likedArticle,
+                        'actionPath': path('like_article', {id: article.getId()})
+                    })
+                }}
+            {% endif %}
         </div>
     </div>
 
@@ -67,13 +69,15 @@
                                 <p class="text-xs">{{ comment.getDate()|date("d/m/Y H:i") }}</p>
                             </div>
                             <p class="">{{ comment.getContent()|raw }}</p>
-                            {# TODO: Make the like button actually trigger the Like logic. #}
-                            {# TODO: Should change it to be filled if the user has liked the comment. #}
-                            <button type="submit" class="self-center xl:self-start fill-none hover:fill-primary stroke-primary">
-                                <svg width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7.16658 10.3333V23.6666M7.16658 10.3333L1.83325 10.3333V23.6666H7.16658M7.16658 10.3333L14.094 2.25125C14.7514 1.48436 15.7855 1.15468 16.7655 1.39965L16.8288 1.41551C18.6179 1.86277 19.4238 3.94739 18.401 5.48176L15.1666 10.3333H21.2471C22.9299 10.3333 24.192 11.8728 23.862 13.5229L22.262 21.5229C22.0127 22.7694 20.9183 23.6666 19.6471 23.6666H7.16658" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
+                            {# TODO: change action path #}
+                            {% if is_granted("ROLE_USER") %}
+                                {{ include('like_button.html.twig',
+                                    {
+                                        'hasLiked': comment in app.user.likedMessages,
+                                        'actionPath': path('like_article', {id: article.getId()})
+                                    })
+                                }}
+                            {% endif %}
                         </div>
                     {% endfor %}
                 {% else %}
