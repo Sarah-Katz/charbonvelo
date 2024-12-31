@@ -1,32 +1,51 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" src="{{asset('public/js/leaflet/leaflet.css')}}"
+    <link rel="stylesheet" href="{{ asset('js/leaflet/leaflet.css') }}">
 {% endblock %}
 
-{% block title %}Les itineraires{% endblock %}
+{% block title %}Les itinéraires{% endblock %}
 
 {% block body %}
-    <div class="flex h-screen">
-        <!-- Carte -->
-        <div id="map" class="w-2/3 h-full bg-gray-300"></div>
+<div class="flex h-screen">
+    <!-- Carte -->
+    <div id="map" class="w-2/3 h-full bg-gray-300"></div>
 
-        <!-- Liste des Stages -->
-        <div class="w-1/3 bg-white p-4 overflow-y-auto">
-            <h1 class="text-2xl font-bold mb-4">Liste des Stages</h1>
-            <ul>
-                {% for stage in stages %}
-                    <li class="mb-4 border-b pb-2">
-                        <h2 class="text-xl font-semibold text-gray-800">{{ stage.title }}</h2>
-                        <embed type="html" class="text-gray-600 text-sm">{{ stage.description|raw }}</embed>
-                    </li>
-                {% endfor %}
-            </ul>
+    <!-- Informations sur le stage -->
+    <div class="w-1/3 bg-white p-4 overflow-y-auto">
+        <h1 class="text-2xl font-bold mb-4">Informations sur l'itinéraire</h1>
+        <div id="stage-container" data-stages>
+            {% for stage in stages %}
+                <div class="stage" 
+                     data-id="{{ stage.id }}" 
+                     data-title="{{ stage.title|e }}" 
+                     data-description="{{ stage.description|e }}" 
+                     data-gpx-filename="{{ stage.gpxLink|e }}">
+                </div>
+            {% endfor %}
         </div>
+        <div id="stage-details" class="mt-4">
+            <h2 id="stage-title" class="text-xl font-semibold text-gray-800"></h2>
+            <div id="stage-description" class="text-gray-600 text-sm mb-4"></div>
+        </div>
+        <button id="prev-stage" class="bg-gray-200 text-gray-800 px-3 py-1 rounded mb-4 disabled:opacity-50" disabled>
+            Précédent
+        </button>
+        <button id="next-stage" class="bg-gray-200 text-gray-800 px-3 py-1 rounded mb-4 disabled:opacity-50" disabled>
+            Suivant
+        </button>
+        <a id="download-gpx" class="bg-primary hover:bg-secondary text-white px-3 py-1 rounded" href="#" target="_blank">
+        Télécharger le GPX
+    </a>
+
+    <!-- Champ de téléchargement de fichier GPX -->
+    <input type="file" id="file-input" accept=".gpx" class="mt-4" />
     </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{asset('public/js/leaflet/leaflet.js')}}"></script>
-    <script src="{{asset('public/js/leaflet-gpx/gpx.js')}}"></script>
+    <script src="{{ asset('js/leaflet/leaflet.js') }}"></script>
+    <script src="{{ asset('js/leaflet-gpx/gpx.js') }}"></script>
+    <script src="{{ asset('js/itinerary.js') }}"></script>
 {% endblock %}
