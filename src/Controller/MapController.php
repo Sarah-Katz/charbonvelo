@@ -11,7 +11,6 @@ class MapController extends AbstractController
 {
     private StageRepository $stageRepository;
 
-    // Injecter le repository Stage dans le constructeur
     public function __construct(StageRepository $stageRepository)
     {
         $this->stageRepository = $stageRepository;
@@ -20,12 +19,15 @@ class MapController extends AbstractController
     #[Route('/map', name: 'app_map')]
     public function index(): Response
     {
-        // Récupérer toutes les entités Stage
         $stages = $this->stageRepository->findAll();
+
+        if (!$stages) {
+            $this->addFlash('warning', 'Aucun stage disponible.');
+        }
 
         return $this->render('map/index.html.twig', [
             'controller_name' => 'MapController',
-            'stages' => $stages, // Passer les stages à Twig
+            'stages' => $stages,
         ]);
     }
 }
