@@ -1,37 +1,63 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navbar</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navbar Responsive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-    <nav class="flex items-center justify-between bg-white shadow-md px-6 py-4">
-        <!-- Logo -->
-        <div class="flex items-center space-x-3">
-            <img src="logo.png" alt="Logo" class="h-8 w-8">
-            <span class="text-xl font-bold text-secondary">La Vélocharbon</span>
-        </div>
 
-        <!-- Menu -->
-        <ul class="flex space-x-6 text-sm font-medium text-primary">
-            <li><a href="#" class="hover:text-accent">Forum</a></li>
-            <li><a href="#" class="hover:text-accent">Actualités</a></li>
-            <li><a href="#" class="hover:text-accent">Itinéraires</a></li>
-        </ul>
+  <body class="bg-gray-100">
+    <!-- Navbar principale -->
+    <nav class="bg-white shadow-md px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between w-screen max-w-screen mx-auto">
+      <!-- Logo -->
+      <div class="flex items-center space-x-2">
+        <a href="/">
+          <img src="images/Logo_Velo_charbon.png" alt="Logo" class="h-8 w-8 sm:h-12 sm:w-12 max-w-screen" />
+        </a>
+        <span class="hidden md:inline text-lg font-bold text-secondary">La Vélocharbon</span>
+      </div>
 
-        <!-- Button -->
-<div>
-    {% if app.user %}
-        <a href="{{ path('app_logout') }}" class="px-4 py-2 text-sm font-medium text-white bg-accent rounded hover:bg-secondary">
-            Se déconnecter
-        </a>
-    {% else %}
-        <a href="{{ path('app_login') }}" class="px-4 py-2 text-sm font-medium text-white bg-secondary rounded hover:bg-accent">
-            Se connecter
-        </a>
-    {% endif %}
-</div>
+      <!-- Liens desktop uniquement -->
+      <ul class="hidden md:flex space-x-6 text-sm font-medium text-primary">
+        <li>
+          <a href="#" class="hover:text-accent">Forum</a>
+        </li>
+        <li>
+          <a href="#" class="hover:text-accent">Actualités</a>
+        </li>
+        <li>
+          <a href="#" class="hover:text-accent">Itinéraires</a>
+        </li>
+      </ul>
+
+      <!-- Boutons -->
+      <div class="flex space-x-4">
+        {% if is_granted('ROLE_ADMIN') %}
+          <a href="{{ path('admin') }}" class="hidden md:inline-block px-3 py-1 text-sm font-medium text-white bg-secondary rounded-full shadow-lg hover:bg-accent">Panel Admin</a>
+        {% endif %}
+
+        {% if app.user %}
+          <a href="{{ path('app_logout') }}" class="px-3 py-1 text-sm font-medium text-white bg-accent rounded-full shadow-lg hover:bg-secondary">Se déconnecter</a>
+        {% else %}
+          <a href="{{ path('app_login') }}" class="px-3 py-1 text-sm font-medium text-white bg-secondary rounded-full shadow-lg hover:bg-accent">Se connecter</a>
+        {% endif %}
+      </div>
     </nav>
-</body>
+
+    <!-- Seconde Navbar (mobile uniquement) -->
+    <div class="bg-primary md:hidden w-full">
+      <ul class="flex justify-around py-2 text-xs font-medium text-white">
+        <li>
+          <a href="#" class="hover:text-accent">Forum</a>
+        </li>
+        <li>
+          <a href="#" class="hover:text-accent">Actualités</a>
+        </li>
+        <li>
+          <a href="#" class="hover:text-accent">Itinéraires</a>
+        </li>
+      </ul>
+    </div>
+  </body>
 </html>
