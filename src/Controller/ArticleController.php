@@ -44,13 +44,9 @@ class ArticleController extends AbstractController
                 $user->addLikedArticle($article);
             }
 
-            $entityManager->persist($user);
-            $entityManager->persist($article);
-
-            // actually executes the queries (i.e. the INSERT query)
             $entityManager->flush();
         } else {
-            // TODO: Do something special if the user isn't logged in
+            return $this->redirectToRoute("app_login");
         }
         return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $id]);
     }
@@ -74,10 +70,9 @@ class ArticleController extends AbstractController
                 $user->addLikedMessage($comment);
             }
 
-            // actually executes the queries (i.e. the INSERT query)
             $entityManager->flush();
         } else {
-            // TODO: Do something special if the user isn't logged in
+            return $this->redirectToRoute("app_login");
         }
         return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $id]);
     }

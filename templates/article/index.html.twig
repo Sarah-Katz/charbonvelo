@@ -69,7 +69,6 @@
                                 <p class="text-xs">{{ comment.getDate()|date("d/m/Y H:i") }}</p>
                             </div>
                             <p class="">{{ comment.getContent()|raw }}</p>
-                            {# TODO: change action path #}
                             {% if is_granted("ROLE_USER") %}
                                 {{ include('like_button.html.twig',
                                     {
