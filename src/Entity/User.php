@@ -156,7 +156,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->likedMessages->contains($message)) {
             $this->likedMessages->add($message);
-            $message->setAuthor($this);
+            $message->addHasLiked($this);
         }
 
         return $this;
@@ -164,17 +164,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeLikedMessage(Message $message): static
     {
-        if ($this->likedMessages->removeElement($message)) {
-            // set the owning side to null (unless already changed)
-            if ($message->getAuthor() === $this) {
-                $message->setAuthor(null);
-            }
-        }
+        $this->likedMessages->removeElement($message);
+        $message->removeHasLiked($this);
 
         return $this;
     }
 
-/**
+    /**
      * @return Collection<int, Article>
      */
     public function getLikedArticle(): Collection
@@ -186,7 +182,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->likedArticle->contains($article)) {
             $this->likedArticle->add($article);
-            $article->setAuthor($this);
+            $article->addHasLiked($this);
         }
 
         return $this;
@@ -194,12 +190,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeLikedArticle(Article $article): static
     {
-        if ($this->likedArticle->removeElement($article)) {
-            // set the owning side to null (unless already changed)
-            if ($article->getAuthor() === $this) {
-                $article->setAuthor(null);
-            }
-        }
+        $this->likedArticle->removeElement($article);
+        $article->removeHasLiked($this);
 
         return $this;
     }
