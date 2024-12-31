@@ -1,3 +1,6 @@
+###> Tailwind ###
+public/output.css
+###< Tailwind ###
 
 ###> symfony/framework-bundle ###
 /.env.local
