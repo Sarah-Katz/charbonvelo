@@ -17,15 +17,12 @@
             <p class="text-gray-600">{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
             <p class="text-text leading-relaxed">{{ article.getContent()|raw }}</p>
 
-            {# TODO: Find a way to avoid double checking is granted, or pass a variable #}
-            {% if is_granted("ROLE_USER") %}
-                {{ include('like_button.html.twig',
-                    {
-                        'hasLiked': article in app.user.likedArticle,
-                        'actionPath': path('like_article', {id: article.getId()})
-                    })
-                }}
-            {% endif %}
+            {{ include('like_button.html.twig',
+                {
+                    'hasLiked': is_granted("ROLE_USER") ? article in app.user.likedArticle : false,
+                    'actionPath': path('like_article', {id: article.getId()})
+                })
+            }}
         </div>
     </div>
 
@@ -69,14 +66,13 @@
                                 <p class="text-xs">{{ comment.getDate()|date("d/m/Y H:i") }}</p>
                             </div>
                             <p class="">{{ comment.getContent()|raw }}</p>
-                            {% if is_granted("ROLE_USER") %}
-                                {{ include('like_button.html.twig',
-                                    {
-                                        'hasLiked': comment in app.user.likedMessages,
-                                        'actionPath': path('like_article_comment', {id: article.getId(), commentId: comment.getId()})
-                                    })
-                                }}
-                            {% endif %}
+                            
+                            {{ include('like_button.html.twig',
+                                {
+                                    'hasLiked': is_granted("ROLE_USER") ? comment in app.user.likedMessages : false,
+                                    'actionPath': path('like_article_comment', {id: article.getId(), commentId: comment.getId()})
+                                })
+                            }}
                         </div>
                     {% endfor %}
                 {% else %}
