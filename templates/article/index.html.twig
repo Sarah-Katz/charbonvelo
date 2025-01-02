@@ -18,7 +18,7 @@
             <p class="text-text leading-relaxed">{{ article.getContent()|raw }}</p>
 
             <p class="italic text-slate-500 xl:self-start self-center">{{ article.getHasLiked()|length }} j'aime(s)</p>
-            {{ include('like_button.html.twig',
+            {{ include('components/like_button.html.twig',
                 {
                     'hasLiked': is_granted("ROLE_USER") ? article in app.user.likedArticle : false,
                     'actionPath': path('like_article', {id: article.getId()})
@@ -35,20 +35,11 @@
 
             {# Add Comment Section #}
             {% if is_granted("ROLE_USER") %}
-                <form method="POST" action="{{ path('add_comment', {articleId: article.getId()}) }}" class="flex flex-col drop-shadow-lg bg-background p-4 rounded-lg gap-1">
-                    <label for="content" class="text-primary font-semibold text-xl">{{ app.user.username }}</label>
-
-                    <div class="w-full rounded-lg p-3 drop-shadow-lg bg-white border flex flex-col">
-                        <textarea id="content" name="content" rows="4"
-                            placeholder="Votre commentaire..."
-                        > </textarea>
-                        <button type="submit"
-                            class="bg-secondary text-primary py-2 px-4 rounded-full hover:bg-primary hover:text-white_text font-medium self-end"
-                        >
-                        Envoyer
-                        </button>
-                    </div>
-                </form> 
+                {{ include('components/add_message.html.twig',
+                    {
+                        "actionPath": path('add_comment', {articleId: article.getId()})
+                    })
+                }}
             {% else %}
                 <p>Veuillez vous <a class="text-accent font-semibold underline" href="{{ path('app_login') }}">connecter</a> pour envoyer un commentaire.</p>
             {% endif %}
@@ -58,23 +49,16 @@
             <div class="space-y-6">
                 {% if allComments|length > 0 %}
                     <p class="italic text-slate-500">{{ allComments|length }} commentaire(s)</p>
+
                     {% for comment in allComments %}
-                        <div class="rounded-lg p-4 bg-background drop-shadow-lg flex flex-col gap-1">
-                            <div class="flex flex-col lg:flex-row lg:items-center gap-4">
-                                <p class="text-primary font-semibold text-xl">{{ comment.getAuthor().getUsername() }}</p>
-                                <p class="text-xs">{{ comment.getDate()|date("d/m/Y H:i") }}</p>
-                            </div>
-                            <p class="">{{ comment.getContent() }}</p>
-                            
-                            <p class="italic text-slate-500 xl:self-start self-center">{{ comment.getHasLiked()|length }} j'aime(s)</p>
-                            {{ include('like_button.html.twig',
-                                {
-                                    'hasLiked': is_granted("ROLE_USER") ? comment in app.user.likedMessages : false,
-                                    'actionPath': path('like_article_comment', {id: article.getId(), commentId: comment.getId()})
-                                })
-                            }}
-                        </div>
+                        {{ include('components/message.html.twig',
+                            {
+                                'message': comment,
+                                'actionPath': path('like_article_comment', {id: article.getId(), commentId: comment.getId()})
+                            })
+                        }}
                     {% endfor %}
+                    
                 {% else %}
                     <p class="text-gray-600">Aucun commentaire pour l'instant...</p>
                 {% endif %}
