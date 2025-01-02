@@ -9,16 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentStageIndex = 0;
 
     // Initialiser la carte
-    const map = L.map('map').setView([50.8, 2.6], 9); // Coordonnées HDF
+    const map = L.map('map').setView([50.8, 2.6], 9);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
     let gpxLayer = null;
+    const segmentLayers = []; // Stocker les couches des segments
 
     // Charger un fichier GPX (format XML)
-    const loadGPX = (filePath) => {
-        console.log(`Chargement du fichier GPX : ${filePath}`);
+    const loadGPX = (filePath, color = 'blue') => {
         if (gpxLayer) map.removeLayer(gpxLayer);
 
         gpxLayer = new L.GPX(filePath, {
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 shadowUrl: '/js/leaflet/images/pin-shadow.png'
             },
             polyline_options: {
-                color: 'blue',
+                color: color,
                 weight: 5,
                 opacity: 0.7,
                 lineJoin: 'round',
@@ -37,17 +37,61 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .on('loaded', (e) => {
             const bounds = e.target.getBounds();
-            map.fitBounds(bounds, { padding: [50, 50] }); // Ajoute un padding pour dézoomer légèrement
-        })
-        .on('error', (e) => {
-            console.error('Erreur lors du chargement du fichier GPX', e);
+            map.fitBounds(bounds, { padding: [50, 50] });
         })
         .addTo(map);
 
-        // Mettre à jour le lien de téléchargement du fichier GPX
         const downloadButton = document.getElementById('download-gpx');
         downloadButton.href = filePath;
-        downloadButton.download = filePath.split('/').pop(); // Utilise le nom du fichier pour le téléchargement
+        downloadButton.download = filePath.split('/').pop();
+    };
+
+    // Charger les segments du tracé global
+    const loadGlobalSegments = (globalFilePath, segments) => {
+        fetch(globalFilePath)
+            .then(response => response.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(data, "text/xml");
+                
+                segments.forEach((segment, index) => {
+                    const { color } = segment;
+    
+                    // Extraire les segments du tracé global
+                    const trkpts = Array.from(xmlDoc.getElementsByTagName('trkpt'))
+                        .slice(index * Math.floor(xmlDoc.getElementsByTagName('trkpt').length / segments.length), 
+                               (index + 1) * Math.floor(xmlDoc.getElementsByTagName('trkpt').length / segments.length))
+                        .map(pt => [
+                            parseFloat(pt.getAttribute('lat')),
+                            parseFloat(pt.getAttribute('lon'))
+                        ]);
+    
+                    const polyline = L.polyline(trkpts, {
+                        color: color,
+                        weight: 5,
+                        opacity: 0.7,
+                    }).addTo(map);
+    
+                    polyline.on('mouseover', () => {
+                        polyline.setStyle({ weight: 6, opacity: 1 });
+                    });
+    
+                    polyline.on('mouseout', () => {
+                        polyline.setStyle({ weight: 5, opacity: 0.7 });
+                    });
+    
+                    polyline.on('click', () => {
+                        currentStageIndex = index + 1;
+                        updateStageDetails();
+                    });
+    
+                    segmentLayers.push(polyline); // Ajouter la couche segment pour référence future
+                });
+    
+                console.log('Tracé global avec segments chargé.');
+                map.fitBounds(segmentLayers.reduce((bounds, layer) => bounds.extend(layer.getBounds()), L.latLngBounds()), { padding: [50, 50] });
+            })
+            .catch(error => console.error('Erreur lors du chargement du tracé global:', error));
     };
 
     // Mettre à jour les informations du stage
@@ -55,7 +99,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const stage = stages[currentStageIndex];
         document.getElementById('stage-title').textContent = stage.title;
         document.getElementById('stage-description').innerHTML = stage.description;
-        loadGPX(`/uploads/gpx/${stage.gpxFilename}`);
+        loadGPX(`/uploads/gpx/${stage.gpxFilename}`, 'blue');
+
+        // Restaurer les couleurs des segments
+        segmentLayers.forEach((layer, index) => {
+            const { color } = segments[index];
+            layer.setStyle({
+                color: color,
+                weight: 5,
+                opacity: 0.7,
+            });
+        });
 
         // Désactiver/activer les boutons suivant et précédent
         document.getElementById('prev-stage').disabled = currentStageIndex === 0;
@@ -77,25 +131,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Ajouter un gestionnaire d'événements pour le champ de fichier
-    document.getElementById('file-input').addEventListener('change', (event) => {
-        const file = event.target.files[0]; // Récupérer le fichier sélectionné
-        if (file && file.name.endsWith('.gpx')) {
-            const reader = new FileReader();
-
-            reader.onload = (e) => {
-                const gpxData = e.target.result; // Contenu du fichier GPX
-                const filePath = URL.createObjectURL(new Blob([gpxData], { type: 'application/gpx+xml' }));
-
-                loadGPX(filePath); // Charger et afficher le fichier GPX sur la carte
-            };
-
-            reader.readAsText(file); // Lire le fichier en tant que texte
-        } else {
-            alert('Veuillez sélectionner un fichier GPX.');
-        }
-    });
-
     // Initialisation
-    updateStageDetails();
+    const globalFilePath = '/uploads/gpx/eurovelo-5-via-romea-676e5fe0e64ad692906972.xml';
+    const segments = [
+        { gpxFilename: '1-calais-st-omer-6773d110a588e057960527.xml', color: 'blue' },
+        { gpxFilename: '2-st-omer-bethunes-6773d14809d2b875170057.xml', color: 'grey' },
+        { gpxFilename: '3-bethunes-lens-6773d169ec75d411725225.xml', color: 'red' },
+        { gpxFilename: '4-lens-lille-6773d1a70bdfd397902061.xml', color: 'yellow' },
+        { gpxFilename: '5-lille-wattrelos-6773d1ce84c41283049639.xml', color: 'black' },
+    ];
+    // TODO: Use array of file not table
+
+    loadGlobalSegments(globalFilePath, segments); // Charger le tracé global et les segments
+    updateStageDetails(); // Charger les détails initiaux
 });
