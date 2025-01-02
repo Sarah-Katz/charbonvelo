@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+use App\Service\AutoPaginationService;
+
 use App\Repository\ArticleRepository;
 use App\Repository\MessageRepository;
 
@@ -17,14 +19,16 @@ class ArticleController extends AbstractController
 {
     #[Route('/articles', name: 'app_articles')]
     public function index(
-        ArticleRepository $articleRepo
+        Request $request,
+        ArticleRepository $articleRepo,
+        AutoPaginationService $pageService
         ): Response
     {
-        // TODO: Change to make a pagination system
-        $articles = $articleRepo->findAll();
+        $pageInfo = $pageService->paginate(request: $request, entityRepository: $articleRepo, limit: 3);
 
         return $this->render('article/index.html.twig', [
-            'allArticles' => $articles,
+            'allArticles' => $pageInfo['items'],
+            'pageInfo' => $pageInfo
         ]);
     }
 

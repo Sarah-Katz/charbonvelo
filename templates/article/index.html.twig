@@ -7,7 +7,7 @@
 {# All articles #}
 
 {% if allArticles|length > 0 %}
-    <p class="italic text-slate-500">{{ allArticles|length }} article(s)</p>
+    <p class="italic text-slate-500">{{ allArticles|length }} article(s) sur {{ pageInfo["totalItems"] }}</p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
     {% for article in allArticles %}
