@@ -15,6 +15,19 @@ use App\Repository\MessageRepository;
 
 class ArticleController extends AbstractController
 {
+    #[Route('/articles', name: 'app_articles')]
+    public function index(
+        ArticleRepository $articleRepo
+        ): Response
+    {
+        // TODO: Change to make a pagination system
+        $articles = $articleRepo->findAll();
+
+        return $this->render('article/index.html.twig', [
+            'allArticles' => $articles,
+        ]);
+    }
+
     #[Route('/articles/{id}', name: 'show_article')]
     public function show(
         int $id,

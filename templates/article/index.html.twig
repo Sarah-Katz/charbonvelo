@@ -1,85 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ article.getTitle() }} | Vélocharbon{% endblock %}
+{% block title %}Articles | Vélocharbon{% endblock %}
 
 {% block body %}
-<div class="bg-background w-full h-full text-text text-base">
-    <div class="w-full max-h-96 overflow-hidden">
-        {# Center the image vertically #}
-        <img src="{{ asset('images/article.webp') }}" class="w-full object-cover h-96"></img>
-    </div>
+<div class="bg-background w-full h-full p-8 text-text text-base">
+    {# All articles #}
+    <div class="space-y-6">
+    {% if allArticles|length > 0 %}
+        <p class="italic text-slate-500">{{ allArticles|length }} article(s)</p>
 
-
-    <div class="px-5 py-8 xl:p-8">
-        <div class ="mx-auto max-w-screen-xl flex flex-col gap-3">
-            {# Article Title and Info #}
-            <h2 class="text-primary text-4xl font-medium xl:self-center">{{ article.getTitle() }}</h2>
-            <p class="text-gray-600">{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
-            <p class="text-text leading-relaxed">{{ article.getContent()|raw }}</p>
-
-            <p class="italic text-slate-500 xl:self-start self-center">{{ article.getHasLiked()|length }} j'aime(s)</p>
-            {{ include('like_button.html.twig',
-                {
-                    'hasLiked': is_granted("ROLE_USER") ? article in app.user.likedArticle : false,
-                    'actionPath': path('like_article', {id: article.getId()})
-                })
-            }}
-        </div>
-    </div>
-
-
-    {# Comments Section #}
-    <div class="px-5 py-8 xl:p-8 bg-neutral-100">
-        <div class="mx-auto max-w-screen-xl flex flex-col gap-5 ">
-            <h2 class="text-primary text-4xl font-medium">Commentaires</h2>
-
-            {# Add Comment Section #}
-            {% if is_granted("ROLE_USER") %}
-                <form method="POST" action="{{ path('add_comment', {articleId: article.getId()}) }}" class="flex flex-col drop-shadow-lg bg-background p-4 rounded-lg gap-1">
-                    <label for="content" class="text-primary font-semibold text-xl">{{ app.user.username }}</label>
-
-                    <div class="w-full rounded-lg p-3 drop-shadow-lg bg-white border flex flex-col">
-                        <textarea id="content" name="content" rows="4"
-                            placeholder="Votre commentaire..."
-                        > </textarea>
-                        <button type="submit"
-                            class="bg-secondary text-primary py-2 px-4 rounded-full hover:bg-primary hover:text-white_text font-medium self-end"
-                        >
-                        Envoyer
-                        </button>
+        <div class="grid grid-cols-1 lg:grid-cols-3">
+        {% for article in allArticles %}
+            <div class="m-3 bg-[url('{{ asset('images/article.webp') }}')] bg-cover rounded-lg overflow-hidden drop-shadow-lg">
+                <div class="p-4 flex flex-col gap-1 bg-opacity-80 bg-white">
+                    <p class="text-primary font-semibold text-xl text-center">{{ article.getTitle() }}</p>
+                    <div class="flex flex-col lg:flex-row lg:items-center gap-3 text-sm">
+                        <p>{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
                     </div>
-                </form> 
-            {% else %}
-                <p>Veuillez vous <a class="text-accent font-semibold underline" href="{{ path('app_login') }}">connecter</a> pour envoyer un commentaire.</p>
-            {% endif %}
-
-            {# All comments #}
-            {% set allComments = article.getComments() %}
-            <div class="space-y-6">
-                {% if allComments|length > 0 %}
-                    <p class="italic text-slate-500">{{ allComments|length }} commentaire(s)</p>
-                    {% for comment in allComments %}
-                        <div class="rounded-lg p-4 bg-background drop-shadow-lg flex flex-col gap-1">
-                            <div class="flex flex-col lg:flex-row lg:items-center gap-4">
-                                <p class="text-primary font-semibold text-xl">{{ comment.getAuthor().getUsername() }}</p>
-                                <p class="text-xs">{{ comment.getDate()|date("d/m/Y H:i") }}</p>
-                            </div>
-                            <p class="">{{ comment.getContent() }}</p>
-                            
-                            <p class="italic text-slate-500 xl:self-start self-center">{{ comment.getHasLiked()|length }} j'aime(s)</p>
-                            {{ include('like_button.html.twig',
-                                {
-                                    'hasLiked': is_granted("ROLE_USER") ? comment in app.user.likedMessages : false,
-                                    'actionPath': path('like_article_comment', {id: article.getId(), commentId: comment.getId()})
-                                })
-                            }}
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="text-gray-600">Aucun commentaire pour l'instant...</p>
-                {% endif %}
+                    {# <p class="">{{ article.getContent()|length > 160 ? article.getContent()|truncate_html(157)~"..." : article.getContent() }}</p> #}
+                    
+                    <p class="italic text-slate-500 xl:self-start self-center">{{ article.getHasLiked()|length }} j'aime(s)</p>
+                </div>
             </div>
+        {% endfor %}
         </div>
+
+    {% else %}
+        <p class="text-gray-600">Aucun article pour l'instant...</p>
+    {% endif %}
     </div>
 </div>
 {% endblock %}
