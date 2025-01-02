@@ -15,15 +15,15 @@ use App\Repository\MessageRepository;
 
 class ArticleController extends AbstractController
 {
-    #[Route('/article/{id}', name: 'app_article')]
-    public function index(
+    #[Route('/articles/{id}', name: 'show_article')]
+    public function show(
         int $id,
         ArticleRepository $articleRepo
         ): Response
     {
         $article = $articleRepo->find($id);
 
-        return $this->render('article/index.html.twig', [
+        return $this->render('article/show.html.twig', [
             'article' => $article,
         ]);
     }
@@ -62,7 +62,7 @@ class ArticleController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $articleId]);
+        return $this->redirectToRoute(route: "show_article", parameters: ["id"=> $articleId]);
     }
 
     #[Route('/like/article/{id}', name: 'like_article', methods: ["POST"])]
@@ -87,7 +87,7 @@ class ArticleController extends AbstractController
         } else {
             return $this->redirectToRoute("app_login");
         }
-        return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $id]);
+        return $this->redirectToRoute(route: "show_article", parameters: ["id"=> $id]);
     }
 
     #[Route('/like/comment/{id}/{commentId}', name: 'like_article_comment', methods: ["POST"])]
@@ -113,6 +113,6 @@ class ArticleController extends AbstractController
         } else {
             return $this->redirectToRoute("app_login");
         }
-        return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $id]);
+        return $this->redirectToRoute(route: "show_article", parameters: ["id"=> $id]);
     }
 }
