@@ -1,3 +1,9 @@
+{#
+This helps sending a new message with a box.
+Parameters:
+- actionPath: string - The path to send the form data to
+#}
+
 <form method="POST" action="{{ actionPath }}" class="flex flex-col drop-shadow-lg bg-background p-4 rounded-lg gap-1">
     <label for="content" class="text-primary font-semibold text-xl">{{ app.user.username }}</label>
 
