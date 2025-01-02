@@ -5,5 +5,26 @@
 {% endblock %}
 
 {% block body %}
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">{{ subject.title }}</h1>
 
+    {# All comments #}
+    {% set allMessages = subject.messages %}
+    <div class="space-y-6">
+      {% if (allMessages|length) > 0 %}
+        <p class="italic text-slate-500">{{ allMessages|length }} commentaire(s)</p>
+
+        {% for message in allMessages %}
+          {{ include('components/message.html.twig', { message: message, actionPath: path('like_subject_message', { id: subject.id, messageId: message.id() }) }) }}
+        {% endfor %}
+      {% else %}
+        <p class="text-gray-600">Aucun messages pour l'instant...</p>
+      {% endif %}
+    </div>
+
+    <div class="mt-8">
+      <a href="{{ path('subject_index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back to Subjects</a>
+      <a href="{{ path('subject_edit', { id: subject.id }) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-4">Edit</a>
+    </div>
+  </div>
 {% endblock %}

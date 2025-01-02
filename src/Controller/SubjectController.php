@@ -33,7 +33,7 @@ class SubjectController extends AbstractController
     {
         $subject = $this->em->getRepository(Subject::class)->find($id);
         $message = new Message();
-        $form = $this->createForm(MessageFormType::class, $message);
+        $form    = $this->createForm(MessageFormType::class, $message);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -49,5 +49,26 @@ class SubjectController extends AbstractController
             'form'            => $form->createView(),
             'subject'         => $subject,
         ]);
+    }
+
+    #[Route('/like/comment/{id}/{commentId}', name: 'like_article_comment', methods: ["POST"])]
+    public function likeComment(int $id, int $commentId): Response
+    { 
+        $user = $this->getUser();
+
+        if (isset($user)) {
+            $comment = $messageRepo->find($commentId);
+
+            if ($user->getLikedMessages()->contains($comment)) {
+                $user->removeLikedMessage($comment);
+            } else {
+                $user->addLikedMessage($comment);
+            }
+
+            $entityManager->flush();
+        } else {
+            return $this->redirectToRoute("app_login");
+        }
+        return $this->redirectToRoute(route: "app_article", parameters: ["id" => $id]);
     }
 }
