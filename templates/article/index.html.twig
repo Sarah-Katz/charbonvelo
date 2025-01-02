@@ -3,32 +3,42 @@
 {% block title %}Articles | Vélocharbon{% endblock %}
 
 {% block body %}
-<div class="bg-background w-full h-full p-8 text-text text-base">
-    {# All articles #}
-    <div class="space-y-6">
-    {% if allArticles|length > 0 %}
-        <p class="italic text-slate-500">{{ allArticles|length }} article(s)</p>
+<div class="lg:p-8 p-6 text-text text-base">
+{# All articles #}
 
-        <div class="grid grid-cols-1 lg:grid-cols-3">
-        {% for article in allArticles %}
-            <div class="m-3 bg-[url('{{ asset('images/article.webp') }}')] bg-cover rounded-lg overflow-hidden drop-shadow-lg">
-                <div class="p-4 flex flex-col gap-1 bg-opacity-80 bg-white">
-                    <p class="text-primary font-semibold text-xl text-center">{{ article.getTitle() }}</p>
-                    <div class="flex flex-col lg:flex-row lg:items-center gap-3 text-sm">
-                        <p>{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
-                    </div>
-                    {# <p class="">{{ article.getContent()|length > 160 ? article.getContent()|truncate_html(157)~"..." : article.getContent() }}</p> #}
-                    
-                    <p class="italic text-slate-500 xl:self-start self-center">{{ article.getHasLiked()|length }} j'aime(s)</p>
+{% if allArticles|length > 0 %}
+    <p class="italic text-slate-500">{{ allArticles|length }} article(s)</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    {% for article in allArticles %}
+        {# TODO: Change the image asset once articles have image links #}
+        <a href="{{ path('show_article', {'id': article.getId()}) }}"
+            class="min-h-48 lg:m-3 m-2 scale-100 hover:scale-105
+            bg-[url('{{ asset('images/article.webp') }}')] bg-cover
+            rounded-lg overflow-clip drop-shadow-lg
+            transition-all duration-500 ease-in-out"
+        >
+            <div class="h-full w-full xl:p-4 p-3
+                flex flex-col justify-end gap-1
+                bg-opacity-60 bg-white backdrop-blur-[2px]
+                hover:bg-opacity-75 hover:backdrop-blur-sm
+                transition-all duration-500 ease-in-out"
+            >
+                <p class="text-primary font-semibold text-xl text-center">{{ article.getTitle() }}</p>
+                
+                <div class="flex flex-col w-full lg:flex-row items-end justify-center gap-3 text-sm">
+                    <p>{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
+                    <p>{{ article.getHasLiked()|length }} j'aime(s)</p>
                 </div>
             </div>
-        {% endfor %}
-        </div>
-
-    {% else %}
-        <p class="text-gray-600">Aucun article pour l'instant...</p>
-    {% endif %}
+        </a>
+    {% endfor %}
     </div>
+
+{% else %}
+    <p class="text-gray-600">Aucun article pour l'instant...</p>
+{% endif %}
+
 </div>
 {% endblock %}
 
