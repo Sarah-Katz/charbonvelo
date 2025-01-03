@@ -14,9 +14,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 use App\Service\AutoPaginationService;
 
-use App\Repository\ArticleRepository;
-use App\Repository\MessageRepository;
-
 class ArticleController extends AbstractController
 {
     private $em;
@@ -43,11 +40,10 @@ class ArticleController extends AbstractController
 
     #[Route('/articles/{id}', name: 'show_article')]
     public function show(
-        int $id,
-        ArticleRepository $articleRepo
+        int $id
         ): Response
     {
-        $article = $articleRepo->find($id);
+        $article = $this->em->getRepository(Article::class)->find($id);
 
         return $this->render('article/show.html.twig', [
             'article' => $article,
@@ -58,14 +54,13 @@ class ArticleController extends AbstractController
     public function addComment(
         int $articleId,
         Request $request,
-        ArticleRepository $articleRepo,
         EntityManagerInterface $entityManager
         ): Response
     {
         $user = $this->getUser();
         if (!isset($user)) { return $this->redirectToRoute("app_login"); }
         
-        $article = $articleRepo->find($articleId);
+        $article = $this->em->getRepository(Article::class)->find($articleId);
         if (!isset($article)) { $this->redirectToRoute("app_home"); }
 
 
@@ -94,14 +89,13 @@ class ArticleController extends AbstractController
     #[Route('/like/article/{id}', name: 'like_article', methods: ["POST"])]
     public function likeArticle(
         int $id,
-        ArticleRepository $articleRepo,
         EntityManagerInterface $entityManager
         ): Response
     {
         $user = $this->getUser();
 
         if (isset($user)) {
-            $article = $articleRepo->find($id);
+            $article = $this->em->getRepository(Article::class)->find($id);
 
             if ($user->getLikedArticle()->contains($article)) {
                 $user->removeLikedArticle($article);
@@ -119,15 +113,13 @@ class ArticleController extends AbstractController
     #[Route('/like/comment/{id}/{commentId}', name: 'like_article_comment', methods: ["POST"])]
     public function likeComment(
         int $id,
-        int $commentId,
-        MessageRepository $messageRepo,
-        EntityManagerInterface $entityManager
+        int $commentId
         ): Response
     {
         $user = $this->getUser();
 
         if (isset($user)) {
-            $comment = $messageRepo->find($commentId);
+            $comment = $this->em->getRepository(Message::class)->find($id);
 
             if ($user->getLikedMessages()->contains($comment)) {
                 $user->removeLikedMessage($comment);
@@ -135,7 +127,7 @@ class ArticleController extends AbstractController
                 $user->addLikedMessage($comment);
             }
 
-            $entityManager->flush();
+            $this->em->flush();
         } else {
             return $this->redirectToRoute("app_login");
         }
