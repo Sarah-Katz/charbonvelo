@@ -11,12 +11,13 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
     {% for article in allArticles %}
-        {# TODO: Change the image asset once articles have image links #}
+        {% set image = article.getImage() %}
         <a href="{{ path('show_article', {'id': article.getId()}) }}"
             class="min-h-48 lg:m-3 m-2 scale-100 hover:scale-105
-            bg-[url('{{ asset('images/article.webp') }}')] bg-cover
+            bg-[url('{{ asset(image.getPath()) }}')] bg-cover
             rounded-lg overflow-clip drop-shadow-lg
             transition-all duration-500 ease-in-out"
+            title="{{ image.getAlt() }}"
         >
             <div class="h-full w-full xl:p-4 p-3
                 flex flex-col justify-end gap-1
