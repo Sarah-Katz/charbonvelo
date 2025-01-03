@@ -7,8 +7,8 @@
 {% block body %}
   <div class="container mx-auto px-4 py-8">
     <div class="flex items-center justify-between mb-6">
-      <h1 class="text-3xl font-bold">{{ subject.title }}</h1>
-      <a href="{{ path('app_category_show', { category: subject.category.id }) }}" class="bg-secondary hover:bg-accent text-white font-bold py-2 px-4 rounded-full">Retour à la liste des sujets</a>
+      <h1 class="text-primary text-3xl font-bold">{{ subject.title }}</h1>
+      <a href="{{ path('app_category_show', { category: subject.category.id }) }}" class="bg-secondary hover:bg-primary text-white font-bold py-2 px-4 rounded-full">Retour à la liste des sujets</a>
     </div>
 
     <div class="space-y-6">
