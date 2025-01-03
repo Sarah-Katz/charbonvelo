@@ -32,23 +32,16 @@ class SubjectController extends AbstractController
     public function newMessage(int $id, Request $request): Response
     {
         $subject = $this->em->getRepository(Subject::class)->find($id);
+
         $message = new Message();
-        $form    = $this->createForm(MessageFormType::class, $message);
-        $form->handleRequest($request);
+        $message->setSubject($subject);
+        $message->setContent($request->request->get('content'));
+        $message->setAuthor($this->getUser());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $message->setSubject($subject);
-            $this->em->persist($message);
-            $this->em->flush();
+        $this->em->persist($message);
+        $this->em->flush();
 
-            return $this->redirectToRoute('app_subject_show', ['id' => $id]);
-        }
-
-        return $this->render('subject/newMessage.html.twig', [
-            'controller_name' => 'SubjectController',
-            'form'            => $form->createView(),
-            'subject'         => $subject,
-        ]);
+        return $this->redirectToRoute('app_subject_show', ['id' => $id]);
     }
 
     #[Route('/like/message/{id}', name: 'like_subject_message', methods: ["POST"])]

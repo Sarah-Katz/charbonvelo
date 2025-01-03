@@ -18,6 +18,6 @@
     </div>
 
     {# Add message Section #}
-    <div class="w-full mt-8">{{ include('components/add_message.html.twig', { actionPath: path('add_comment', { articleId: subject.id }) }) }}</div>
+    <div class="w-full mt-8">{{ include('components/add_message.html.twig', { actionPath: path('app_message_new', { id: subject.id }) }) }}</div>
   </div>
 {% endblock %}
