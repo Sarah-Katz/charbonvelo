@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('js/leaflet/leaflet.css') }}">
 {% endblock %}
 
@@ -35,16 +36,17 @@
             Suivant
         </button>
         <a id="download-gpx" class="bg-primary hover:bg-secondary text-white px-3 py-1 rounded" href="#" target="_blank">
-        Télécharger le GPX
-    </a>
+            Télécharger le GPX
+        </a>
 
-    <!-- Champ de téléchargement de fichier GPX -->
-    <input type="file" id="file-input" accept=".gpx" class="mt-4" />
+        <!-- Champ de téléchargement de fichier GPX -->
+        <input type="file" id="file-input" accept=".gpx" class="mt-4" />
     </div>
 </div>
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script src="{{ asset('js/leaflet/leaflet.js') }}"></script>
     <script src="{{ asset('js/leaflet-gpx/gpx.js') }}"></script>
     <script src="{{ asset('js/itinerary.js') }}"></script>

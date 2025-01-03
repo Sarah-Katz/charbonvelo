@@ -6,6 +6,7 @@ use App\Repository\SubjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Message;
+use Doctrine\Common\Collections\Criteria;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -61,6 +62,37 @@ class Subject
     {
         $this->category = $category;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        $criteria = Criteria::create()
+            ->orderBy(['date' => Criteria::ASC]);
+
+        return $this->messages->matching($criteria);
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
+            $message->setSubject($this);
+        }
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getSubject() === $this) {
+                $message->setSubject(null);
+            }
+        }
         return $this;
     }
 }

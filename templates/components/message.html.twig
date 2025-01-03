@@ -1,0 +1,25 @@
+{#
+Reason that this is a single message is that you might want to change how they're arranged.
+If you need to change how one looks, please change this template and add a parameter.
+Includes another twig for the Like button, which is a comonent of its own but that needs to be kept track of.
+
+Parameters:
+- message: Message - The message to display
+- actionPath: string - The path to send the form data to
+#}
+
+<div class="rounded-lg p-4 bg-background drop-shadow-lg flex flex-col gap-1">
+    <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+        <p class="text-primary font-semibold text-xl">{{ message.getAuthor().getUsername() }}</p>
+        <p class="text-xs">{{ message.getDate()|date("d/m/Y H:i") }}</p>
+    </div>
+    <p class=>{{ message.getContent() }}</p>
+
+    <p class="italic text-slate-500 xl:self-start self-center">{{ message.getHasLiked()|length }} j'aime(s)</p>
+    {{ include('components/like_button.html.twig',
+        {
+            'hasLiked': is_granted("ROLE_USER") ? message in app.user.likedMessages : false,
+            'actionPath': actionPath
+        })
+    }}
+</div>
