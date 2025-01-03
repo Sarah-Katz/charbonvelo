@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Message;
+use App\Entity\Article;
+
 use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,14 +19,21 @@ use App\Repository\MessageRepository;
 
 class ArticleController extends AbstractController
 {
+    private $em;
+    public function __construct(EntityManagerInterface $entityManager) {
+        $this->em = $entityManager;
+    }
+
     #[Route('/articles', name: 'app_articles')]
     public function index(
         Request $request,
-        ArticleRepository $articleRepo,
         AutoPaginationService $pageService
         ): Response
     {
-        $pageInfo = $pageService->paginate(request: $request, entityRepository: $articleRepo, limit: 12);
+        $queryBuilder = $this->em->getRepository(Article::class)->createQueryBuilder('a');
+        $queryBuilder->orderBy("a.date", "DESC");
+
+        $pageInfo = $pageService->paginate(request: $request, queryBuilder: $queryBuilder, limit: 12);
 
         return $this->render('article/index.html.twig', [
             'allArticles' => $pageInfo['items'],

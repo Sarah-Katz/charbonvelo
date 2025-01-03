@@ -2,17 +2,16 @@
 
 namespace App\Service;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
 class AutoPaginationService
 {
     public const ITEMS_PER_PAGE = 12;
-    public function paginate(Request $request, ServiceEntityRepository $entityRepository, int $limit = this::ITEMS_PER_PAGE): array
+    public function paginate(Request $request, QueryBuilder $queryBuilder, int $limit = this::ITEMS_PER_PAGE): array
     {
         $page = $request->query->get('page', '1');
-        $queryBuilder = $entityRepository->createQueryBuilder('a');
 
         $paginator = new Paginator($queryBuilder);
         $paginator->getQuery()
