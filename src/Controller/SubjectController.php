@@ -51,8 +51,8 @@ class SubjectController extends AbstractController
         ]);
     }
 
-    #[Route('/like/comment/{id}/{commentId}', name: 'like_article_comment', methods: ["POST"])]
-    public function likeComment(int $id, int $commentId): Response
+    #[Route('/like/message/{id}', name: 'like_subject_message', methods: ["POST"])]
+    public function likeComment(int $id): Response
     { 
         $user = $this->getUser();
 
