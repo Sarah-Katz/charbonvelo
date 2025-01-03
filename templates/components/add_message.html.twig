@@ -5,16 +5,8 @@ Parameters:
 #}
 
 <form method="POST" action="{{ actionPath }}" class="flex flex-col drop-shadow-lg bg-background p-4 rounded-lg gap-1">
-    <label for="content" class="text-primary font-semibold text-xl">{{ app.user.username }}</label>
-
-    <div class="w-full rounded-lg p-3 drop-shadow-lg bg-white border flex flex-col">
-        <textarea id="content" name="content" rows="4"
-            placeholder="Votre texte ici..."
-        > </textarea>
-        <button type="submit"
-            class="bg-secondary text-primary py-2 px-4 rounded-full hover:bg-primary hover:text-white_text font-medium self-end"
-        >
-        Envoyer
-        </button>
-    </div>
+  <div class="w-full rounded-lg p-3 drop-shadow-lg bg-white border flex flex-col">
+    <textarea id="content" name="content" rows="4" placeholder="Votre texte ici..."></textarea>
+    <button type="submit" class="bg-secondary text-primary py-2 px-4 rounded-full hover:bg-primary hover:text-white_text font-medium self-end">Envoyer</button>
+  </div>
 </form>

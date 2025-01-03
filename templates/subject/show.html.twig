@@ -16,5 +16,8 @@
         {{ include('components/message.html.twig', { message: message, actionPath: path('like_subject_message', { id: subject.id, messageId: message.id() }) }) }}
       {% endfor %}
     </div>
+
+    {# Add message Section #}
+    <div class="w-full mt-8">{{ include('components/add_message.html.twig', { actionPath: path('add_comment', { articleId: subject.id }) }) }}</div>
   </div>
 {% endblock %}
