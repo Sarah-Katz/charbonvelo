@@ -131,17 +131,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Gestion du téléchargement d'un fichier GPX local
+    document.getElementById('file-input').addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result; // Contenu du fichier GPX
+                loadLocalGPX(content); // Appel de la fonction de chargement du fichier local
+            };
+            reader.readAsText(file); // Lire le fichier en tant que texte
+        }
+    });
+
+    // Fonction pour charger un GPX local (fichier téléchargé)
+    const loadLocalGPX = (gpxContent) => {
+        if (gpxLayer) map.removeLayer(gpxLayer);
+
+        gpxLayer = new L.GPX(gpxContent, {
+            async: true,
+            marker_options: {
+                startIconUrl: '/js/leaflet/images/pin-icon-start.png',
+                endIconUrl: '/js/leaflet/images/pin-icon-end.png',
+                shadowUrl: '/js/leaflet/images/pin-shadow.png'
+            },
+            polyline_options: {
+                color: 'blue',
+                weight: 5,
+                opacity: 0.7,
+                lineJoin: 'round',
+            }
+        })
+        .on('loaded', (e) => {
+            const bounds = e.target.getBounds();
+            map.fitBounds(bounds, { padding: [50, 50] });
+        })
+        .addTo(map);
+
+        console.log('Fichier GPX local chargé avec succès.');
+    };
+
     // Initialisation
     const globalFilePath = '/uploads/gpx/eurovelo-5-via-romea-676e5fe0e64ad692906972.xml';
     const segments = [
         { gpxFilename: '1-calais-st-omer-6773d110a588e057960527.xml', color: 'blue' },
         { gpxFilename: '2-st-omer-bethunes-6773d14809d2b875170057.xml', color: 'grey' },
         { gpxFilename: '3-bethunes-lens-6773d169ec75d411725225.xml', color: 'red' },
-        { gpxFilename: '4-lens-lille-6773d1a70bdfd397902061.xml', color: 'yellow' },
-        { gpxFilename: '5-lille-wattrelos-6773d1ce84c41283049639.xml', color: 'black' },
+        { gpxFilename: '4-lens-arras-6773d189736ee4b7284265.xml', color: 'yellow' },
+        { gpxFilename: '5-arras-amiens-6773d1b78ff3032a2ac0a7.xml', color: 'black' }
     ];
-    // TODO: Use array of file not table
 
-    loadGlobalSegments(globalFilePath, segments); // Charger le tracé global et les segments
-    updateStageDetails(); // Charger les détails initiaux
+    loadGlobalSegments(globalFilePath, segments);
+    updateStageDetails();
 });

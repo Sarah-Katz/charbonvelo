@@ -2,63 +2,92 @@
 
 {% block title %}Accueil | VéloCharbon{% endblock %}
 
-{% block body %}
-<div class="container mx-auto">
-    <!-- Section principale avec une image bannière -->
-    <div class="relative">
-        <img src="/path/to/banner-image.jpg" alt="Cyclistes en action" class="w-full h-64 object-cover">
-        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 mt-4 bg-secondary text-white px-4 py-2 rounded">
-        </div>
-    </div>
+{% block javascripts %}  
+{{ parent() }}
+<script src="{{ asset('js/carrousel.js') }}"></script>
+{% endblock %}
 
-    <!-- Titre principal et description -->
-    <div class="text-center py-8">
-        <h1 class="text-3xl font-bold text-primary">La Vélocharbon, les trajets des Hauts-de-France à vélo</h1>
-        <p class="text-gray-600 mt-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam. Vivamus et vehicula eros tristique lacus.
+{% block body %}
+<div class="container w-full">
+    <div class="relative w-screen overflow-hidden"> <!-- Remplacez w-full par w-screen -->
+      <!-- Slides -->
+      <div class="mySlides">
+        <img src="{{ asset('images/article.webp') }}" class="w-screen object-cover h-[400px]" alt="Article Image" />
+      </div>
+      <div class="mySlides hidden">
+        <img src="{{ asset('images/biking_road.jpg') }}" class="w-screen object-cover h-[400px]" alt="Biking Road" />
+      </div>
+      <div class="mySlides hidden">
+        <img src="https://img.oastatic.com/img2/48571960/max/variant.jpg" class="w-screen object-cover h-[400px]" alt="Landscape Image" />
+      </div>
+
+      <!-- Next and Previous Buttons -->
+      <button
+        class="prev absolute top-1/2 left-4 transform -translate-y-1/2 text-white text-5xl font-bold hover:scale-125 transition duration-300 cursor-pointer"
+        aria-label="Previous Slide"
+      >
+        &#10094;
+      </button>
+      <button
+        class="next absolute top-1/2 right-4 transform -translate-y-1/2 text-white text-5xl font-bold hover:scale-125 transition duration-300 cursor-pointer"
+        aria-label="Next Slide"
+      >
+        &#10095;
+      </button>
+
+      <!-- Dots -->
+      <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3">
+        <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
+        <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
+        <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
+      </div>
+    </div>
+</div>
+<!-- Section Titre principal et description -->
+    <div class="py-8 px-32 flex flex-col items-center">
+        <h1 class="text-3xl font-bold text-primary text-center">La Vélocharbon, les trajets des Hauts-de-France à vélo</h1>
+        <p class="text-gray-600 mt-4 text-justify">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam. Vivamus et vehicula eros tristique lacus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam. Vivamus et vehicula eros tristique lacus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam. Vivamus et vehicula eros tristique lacus.Vivamus et vehicula eros tristique lacus.
         </p>
         <p class="text-gray-600 mt-2">
-            Natus id id sint illum. Pellentesque tristique facilisis libero, non accumsan arcu vehicula sit amet. Ut at magna eget ligula dignissim congue. Donec a ipsum quis arcu efficitur.
+            Natus id id sint illum. Pellentesque tristique facilisis libero, non accumsan arcu vehicula sit amet. Ut at magna eget ligula dignissim congue. Donec a ipsum quis arcu efficitur.Vivamus et vehicula eros tristique lacus.Vivamus et vehicula eros tristique lacus.
         </p>
     </div>
 
     <!-- Section Actualités -->
-    <div class="grid grid-cols-3 gap-6 py-8">
-        <!-- Colonne actualités -->
-        <div class="col-span-1">
-            <h2 class="text-xl font-bold text-primary mb-4">Actualités</h2>
-            <p class="text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas euismod enim a metus faucibus.
-            </p>
-        </div>
+    <div class="py-8 px-32 flex flex-col items-center">
+        <h2 class="text-2xl font-bold text-primary mb-4 text-center">Actualités</h2>
+        <p class="text-gray-600 text-justify">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas euismod enim a metus faucibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.        
+        </p>
+    </div>  
 
-        <!-- Miniatures -->
-        <div class="col-span-2 grid grid-cols-3 gap-4">
-            {% for i in 1..6 %}
-                <div class="relative">
-                    <img src="/path/to/thumbnail.jpg" alt="Actualité {{ i }}" class="w-full h-32 object-cover">
-                    <div class="absolute bottom-0 bg-black bg-opacity-50 text-white px-2 py-1 w-full text-center">
-                        Titre de l'article
-                    </div>
+    <!-- Photos Miniatures -->
+    <div class="grid grid-cols-3 gap-6 py-8 px-32">
+        {% for article in latestArticles %}
+      <a href="{{path('show_article', {'id':article.id})}}">
+            <div class="relative">
+                <img src="{{ asset(article.getImage().getPath()|default('https://www.nordsports-mag.fr/wp-content/uploads/2024/09/chti-bike-tour-2024-rando-familles-nord-photo-laurent-sanson-41.jpg')) }}" alt="{{ article.title }}" class="w-full h-64 object-cover">
+                <div class="absolute bottom-0 bg-black bg-opacity-50 text-white px-2 py-1 w-full text-center">
+                    {{ article.title }}
                 </div>
-            {% endfor %}
-        </div>
+            </div> 
+      </a>
+        {% endfor %}
     </div>
-
-    <!-- Carte et itinéraire -->
-    <div class="grid grid-cols-3 gap-6 py-8">
-        <!-- Carte -->
-        <div class="col-span-2">
-            <img src="/path/to/map-image.jpg" alt="Carte des itinéraires" class="w-full h-auto">
-        </div>
-
-        <!-- Itinéraire -->
-        <div class="col-span-1">
-            <h2 class="text-xl font-bold text-primary mb-4">Itinéraire</h2>
-            <p class="text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.
-            </p>
-        </div>
+  
+    <!-- Section Carte et itinéraire -->
+    <div class="py-8 px-32 flex flex-col items-center">
+        <h2 class="text-2xl font-bold text-primary m-4 text-center">Itinéraire</h2>
+        <p class="text-gray-600 mb-6 text-justify">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.
+        </p>
+        <!-- Image de la Carte -->
+        <a href="{{path('app_map')}}">
+        <img src="{{ asset('images/map.png') }}" class="object-cover mx-auto" alt="Carte de l'itinéraire">
+        </a>
     </div>
+    
 </div>
 {% endblock %}
