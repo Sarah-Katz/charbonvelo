@@ -169,6 +169,11 @@ class Article
 
     public function getImage(): ?Image
     {
+        if (empty($this->image)) {
+            // Returns a broken image if the image isn't set, which should avoid errors
+            $image = new Image();
+            $image->setPath("article.png");
+        }
         return $this->image;
     }
 
