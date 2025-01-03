@@ -45,6 +45,9 @@ class Article
     #[ORM\JoinTable(name:"user_article")]
     private Collection $hasLiked;
 
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    private ?Image $image = null;
+
     #[ORM\PrePersist]
     public function setCreateTime()
     {
@@ -160,6 +163,18 @@ class Article
     public function removeHasLiked(User $hasLiked): static
     {
         $this->hasLiked->removeElement($hasLiked);
+
+        return $this;
+    }
+
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Image $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
