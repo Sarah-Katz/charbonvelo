@@ -10,20 +10,37 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+use App\Service\AutoPaginationService;
+
 use App\Repository\ArticleRepository;
 use App\Repository\MessageRepository;
 
 class ArticleController extends AbstractController
 {
-    #[Route('/article/{id}', name: 'app_article')]
+    #[Route('/articles', name: 'app_articles')]
     public function index(
+        Request $request,
+        ArticleRepository $articleRepo,
+        AutoPaginationService $pageService
+        ): Response
+    {
+        $pageInfo = $pageService->paginate(request: $request, entityRepository: $articleRepo, limit: 12);
+
+        return $this->render('article/index.html.twig', [
+            'allArticles' => $pageInfo['items'],
+            'pageInfo' => $pageInfo
+        ]);
+    }
+
+    #[Route('/articles/{id}', name: 'show_article')]
+    public function show(
         int $id,
         ArticleRepository $articleRepo
         ): Response
     {
         $article = $articleRepo->find($id);
 
-        return $this->render('article/index.html.twig', [
+        return $this->render('article/show.html.twig', [
             'article' => $article,
         ]);
     }
@@ -62,7 +79,7 @@ class ArticleController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $articleId]);
+        return $this->redirectToRoute(route: "show_article", parameters: ["id"=> $articleId]);
     }
 
     #[Route('/like/article/{id}', name: 'like_article', methods: ["POST"])]
@@ -87,7 +104,7 @@ class ArticleController extends AbstractController
         } else {
             return $this->redirectToRoute("app_login");
         }
-        return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $id]);
+        return $this->redirectToRoute(route: "show_article", parameters: ["id"=> $id]);
     }
 
     #[Route('/like/comment/{id}/{commentId}', name: 'like_article_comment', methods: ["POST"])]
@@ -113,6 +130,6 @@ class ArticleController extends AbstractController
         } else {
             return $this->redirectToRoute("app_login");
         }
-        return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $id]);
+        return $this->redirectToRoute(route: "show_article", parameters: ["id"=> $id]);
     }
 }
