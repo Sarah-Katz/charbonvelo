@@ -42,7 +42,7 @@ class Image
 
     public function getPath(): ?string
     {
-        return $this->path;
+        return "images/"+$this->path;
     }
 
     public function setPath(string $path): static
