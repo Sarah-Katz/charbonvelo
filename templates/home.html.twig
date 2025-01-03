@@ -3,75 +3,48 @@
 {% block title %}Accueil | VéloCharbon{% endblock %}
 
 {% block javascripts %}  
-<script>
-// Function pour le carrousel de la page principale 
-let slideIndex = 1;
-showSlides(slideIndex);
-
-// Next/previous controls
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
-
-// Thumbnail image controls
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
-
-function showSlides(n) {
-  let i;
-  let slides = document.getElementsByClassName("mySlides");
-  let dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";
-  dots[slideIndex-1].className += " active";
-} 
-</script>
+{{ parent() }}
+<script src="{{ asset('js/carrousel.js') }}"></script>
 {% endblock %}
 
 {% block body %}
-<div class="container mx-auto">
-    <!-- 3 images pour le carrousel avec un titre et numeration (1, 2 et 3/3)-->
-    <div class="relative">
-        <div class="mySlides">
-            <div class="absolute top-0  bg-black bg-opacity-50 text-white text-xs px-3 py-2">1 / 3</div>
-            <img src="{{ asset('images/article.webp') }}" class="w-full object-cover h-96"></img>
-            <div class="absolute bottom-4 w-full  text-black text-base text-center">Caption one</div>
-        </div>
-        <div class="mySlides hidden">
-            <div class="absolute top-0  bg-black bg-opacity-50 text-white  text-xs px-3 py-2">2 / 3</div>
-            <img src="{{ asset('images/biking_road.jpg') }}" class="w-full object-cover h-96"></img>
-            <div class="absolute bottom-4 w-full  text-black text-base text-center">Caption two</div>
-        </div>
-        <div class="mySlides hidden">
-            <div class="absolute top-0  bg-black bg-opacity-50 text-white  text-xs px-3 py-2">3 / 3</div>
-            <img src="https://info.lenord.fr/upload/images/houz7235_web-615717e37ab7a.jpg" class="w-full object-cover h-96"></img>
-            <div class="absolute bottom-4 w-full  text-black text-base text-center">Caption three</div>
-        </div>
+<div class="container w-full">
+    <div class="relative w-screen overflow-hidden"> <!-- Remplacez w-full par w-screen -->
+      <!-- Slides -->
+      <div class="mySlides">
+        <img src="{{ asset('images/article.webp') }}" class="w-screen object-cover h-[400px]" alt="Article Image" />
+      </div>
+      <div class="mySlides hidden">
+        <img src="{{ asset('images/biking_road.jpg') }}" class="w-screen object-cover h-[400px]" alt="Biking Road" />
+      </div>
+      <div class="mySlides hidden">
+        <img src="https://img.oastatic.com/img2/48571960/max/variant.jpg" class="w-screen object-cover h-[400px]" alt="Landscape Image" />
+      </div>
 
+      <!-- Next and Previous Buttons -->
+      <button
+        class="prev absolute top-1/2 left-4 transform -translate-y-1/2 text-white text-5xl font-bold hover:scale-125 transition duration-300 cursor-pointer"
+        aria-label="Previous Slide"
+      >
+        &#10094;
+      </button>
+      <button
+        class="next absolute top-1/2 right-4 transform -translate-y-1/2 text-white text-5xl font-bold hover:scale-125 transition duration-300 cursor-pointer"
+        aria-label="Next Slide"
+      >
+        &#10095;
+      </button>
 
-        <!-- Next and previous buttons -->
-        <a class="absolute top-1/2 w-auto cursor-pointer bg-black bg-opacity-50 text-white" onclick="plusSlides(-1)">&#10094;</a>
-        <a class="absolute top-1/2 right-0 w-auto cursor-pointer bg-black bg-opacity-50 text-white" onclick="plusSlides(1)">&#10095;</a>
+      <!-- Dots -->
+      <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3">
+        <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
+        <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
+        <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
+      </div>
     </div>
-
-
-    <!-- The dots/circles -->
-    <div class="text-center">
-        <span class="dot bg-black bg-opacity-50  cursor-pointer inline-block w-4 h-4 rounded-2xl" onclick="currentSlide(1)"></span>
-        <span class="dot  bg-black bg-opacity-50 cursor-pointer inline-block w-4 h-4 rounded-2xl" onclick="currentSlide(2)"></span>
-        <span class="dot  bg-black bg-opacity-50 cursor-pointer inline-block w-4 h-4 rounded-2xl" onclick="currentSlide(3)"></span>
-    </div>
-
-    <!-- Section Titre principal et description -->
-    <div class="py-8 px-32">
+</div>
+<!-- Section Titre principal et description -->
+    <div class="py-8 px-32 flex flex-col items-center">
         <h1 class="text-3xl font-bold text-primary text-center">La Vélocharbon, les trajets des Hauts-de-France à vélo</h1>
         <p class="text-gray-600 mt-4 text-justify">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam. Vivamus et vehicula eros tristique lacus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam. Vivamus et vehicula eros tristique lacus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam. Vivamus et vehicula eros tristique lacus.Vivamus et vehicula eros tristique lacus.
@@ -82,36 +55,38 @@ function showSlides(n) {
     </div>
 
     <!-- Section Actualités -->
-     <!-- Text actualités -->
-    <div class="py-8 px-32">
+    <div class="py-8 px-32 flex flex-col items-center">
         <h2 class="text-2xl font-bold text-primary mb-4 text-center">Actualités</h2>
         <p class="text-gray-600 text-justify">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas euismod enim a metus faucibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.        
         </p>
-    </div>   
+    </div>  
+
     <!-- Photos Miniatures -->
     <div class="grid grid-cols-3 gap-6 py-8 px-32">
-        {% for i in 1..6 %}
+        {% for article in latestArticles %}
+      <a href="{{path('show_article', {'id':article.id})}}">
             <div class="relative">
-                <img src="https://www.nordsports-mag.fr/wp-content/uploads/2024/09/chti-bike-tour-2024-rando-familles-nord-photo-laurent-sanson-41.jpg" alt="Actualité {{ i }}" class="w-full h-64 object-cover">
+                <img src="{{ asset(article.getImage().getPath()|default('https://www.nordsports-mag.fr/wp-content/uploads/2024/09/chti-bike-tour-2024-rando-familles-nord-photo-laurent-sanson-41.jpg')) }}" alt="{{ article.title }}" class="w-full h-64 object-cover">
                 <div class="absolute bottom-0 bg-black bg-opacity-50 text-white px-2 py-1 w-full text-center">
-                    Titre de l'article
+                    {{ article.title }}
                 </div>
-            </div>
+            </div> 
+      </a>
         {% endfor %}
     </div>
   
-
     <!-- Section Carte et itinéraire -->
-    <!-- Text pour l'introduction de l'itinéraire --> 
-    <div class="py-8 px-32">
+    <div class="py-8 px-32 flex flex-col items-center">
         <h2 class="text-2xl font-bold text-primary m-4 text-center">Itinéraire</h2>
-        <p class="text-gray-600 mb-6">
+        <p class="text-gray-600 mb-6 text-justify">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.
         </p>
-    <!-- Image de la Carte -->
-    <img src="{{ asset('images/map.png') }}" class="object-cover mx-auto"></img>
+        <!-- Image de la Carte -->
+        <a href="{{path('app_map')}}">
+        <img src="{{ asset('images/map.png') }}" class="object-cover mx-auto" alt="Carte de l'itinéraire">
+        </a>
     </div>
     
 </div>
