@@ -18,7 +18,7 @@
             <p class="text-text leading-relaxed">{{ article.getContent()|raw }}</p>
 
             <p class="italic text-slate-500 xl:self-start self-center">{{ article.getHasLiked()|length }} j'aime(s)</p>
-            {{ include('like_button.html.twig',
+            {{ include('components/like_button.html.twig',
                 {
                     'hasLiked': is_granted("ROLE_USER") ? article in app.user.likedArticle : false,
                     'actionPath': path('like_article', {id: article.getId()})
@@ -67,7 +67,7 @@
                             <p class="">{{ comment.getContent() }}</p>
                             
                             <p class="italic text-slate-500 xl:self-start self-center">{{ comment.getHasLiked()|length }} j'aime(s)</p>
-                            {{ include('like_button.html.twig',
+                            {{ include('components/like_button.html.twig',
                                 {
                                     'hasLiked': is_granted("ROLE_USER") ? comment in app.user.likedMessages : false,
                                     'actionPath': path('like_article_comment', {id: article.getId(), commentId: comment.getId()})
