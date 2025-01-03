@@ -27,7 +27,7 @@ class AutoPaginationService
             "page" => $page,
             "totalItems" => $totalItems,
             "maxPages" => $maxPages,
-            "hasNextPage" => $page <= $maxPages,
+            "hasNextPage" => $page < $maxPages,
             "hasPreviousPage" => $page > 1,
         ];
     }

@@ -35,6 +35,8 @@
     {% endfor %}
     </div>
 
+    {{ include( "components/pagination.html.twig", {"pathName": "app_articles", "pageInfo": pageInfo} ) }}
+
 {% else %}
     <p class="text-gray-600">Aucun article pour l'instant...</p>
 {% endif %}

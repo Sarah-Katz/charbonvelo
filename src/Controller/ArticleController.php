@@ -24,7 +24,7 @@ class ArticleController extends AbstractController
         AutoPaginationService $pageService
         ): Response
     {
-        $pageInfo = $pageService->paginate(request: $request, entityRepository: $articleRepo, limit: 3);
+        $pageInfo = $pageService->paginate(request: $request, entityRepository: $articleRepo, limit: 12);
 
         return $this->render('article/index.html.twig', [
             'allArticles' => $pageInfo['items'],
