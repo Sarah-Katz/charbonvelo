@@ -32,22 +32,33 @@ class SubjectController extends AbstractController
     public function newMessage(int $id, Request $request): Response
     {
         $subject = $this->em->getRepository(Subject::class)->find($id);
+
         $message = new Message();
-        $form = $this->createForm(MessageFormType::class, $message);
-        $form->handleRequest($request);
+        $message->setSubject($subject);
+        $message->setContent($request->request->get('content'));
+        $message->setAuthor($this->getUser());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $message->setSubject($subject);
-            $this->em->persist($message);
-            $this->em->flush();
+        $this->em->persist($message);
+        $this->em->flush();
 
-            return $this->redirectToRoute('app_subject_show', ['id' => $id]);
+        return $this->redirectToRoute('app_subject_show', ['id' => $id]);
+    }
+
+    #[Route('/like/message/{id}', name: 'like_subject_message', methods: ["POST"])]
+    public function likeMessage(int $id): Response
+    {
+        $user    = $this->getUser();
+        $message = $this->em->getRepository(Message::class)->find($id);
+        if ($user->getLikedMessages()->contains($message)) {
+            $user->removeLikedMessage($message);
+        } else {
+            $user->addLikedMessage($message);
         }
 
-        return $this->render('subject/newMessage.html.twig', [
-            'controller_name' => 'SubjectController',
-            'form'            => $form->createView(),
-            'subject'         => $subject,
-        ]);
+        $this->em->flush();
+
+        $idSubject = $message->getSubject()->getId();
+
+        return $this->redirectToRoute(route: "app_subject_show", parameters: ["id" => $idSubject]);
     }
 }
