@@ -52,23 +52,20 @@ class SubjectController extends AbstractController
     }
 
     #[Route('/like/message/{id}', name: 'like_subject_message', methods: ["POST"])]
-    public function likeComment(int $id): Response
-    { 
-        $user = $this->getUser();
-
-        if (isset($user)) {
-            $comment = $messageRepo->find($commentId);
-
-            if ($user->getLikedMessages()->contains($comment)) {
-                $user->removeLikedMessage($comment);
-            } else {
-                $user->addLikedMessage($comment);
-            }
-
-            $entityManager->flush();
+    public function likeMessage(int $id): Response
+    {
+        $user    = $this->getUser();
+        $message = $this->em->getRepository(Message::class)->find($id);
+        if ($user->getLikedMessages()->contains($message)) {
+            $user->removeLikedMessage($message);
         } else {
-            return $this->redirectToRoute("app_login");
+            $user->addLikedMessage($message);
         }
-        return $this->redirectToRoute(route: "app_article", parameters: ["id" => $id]);
+
+        $this->em->flush();
+
+        $idSubject = $message->getSubject()->getId();
+
+        return $this->redirectToRoute(route: "app_subject_show", parameters: ["id" => $idSubject]);
     }
 }
