@@ -1,0 +1,45 @@
+{#
+Parameters:
+pathName: String - The path name
+pageInfo: {
+    items: Entity - Unused
+    page: int
+    totalItems: int
+    maxPages: int
+    hasNextPage: bool
+    hasPreviousPage: bool
+}
+#}
+
+{% if pageInfo["maxPages"] > 1 %}
+<div class="flex items-center gap-x-2 w-full justify-center">
+    <a {{ pageInfo['hasPreviousPage'] ? "href=" ~ path(pathName, {page: pageInfo['page'] - 1}) : ''}}
+        class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold
+        {{ pageInfo["hasPreviousPage"] ? 'text-primary hover:bg-secondary transition-colors' : 'text-slate-500' }}
+        ">
+        <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Précédent
+    </a>
+
+
+    {% for i in max(1, pageInfo["page"] -5) .. min(pageInfo["maxPages"], pageInfo["page"] +5) %}
+        <a {% if pageInfo["page"] != i %}href="{{ path(pathName, {page: i}) }}"{% endif %}
+            class="inline-flex items-center rounded-lg px-2 py-2 text-sm font-semibold {{ pageInfo["page"] == i ? 'bg-accent text-white' : 'text-primary hover:bg-secondary' }} transition-colors">
+            {{ i }}
+        </a>
+    {% endfor %}
+
+
+    <a {{ pageInfo['hasNextPage'] ? "href=" ~ path(pathName, {page: pageInfo['page'] + 1}) : ''}}
+        class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold
+        {{ pageInfo["hasNextPage"] ? 'text-primary hover:bg-secondary transition-colors' : 'text-slate-500' }}
+        ">
+        Suivant
+        <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </a>
+</div>
+{% endif %}

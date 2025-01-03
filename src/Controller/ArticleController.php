@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Message;
+use App\Entity\Article;
+
 use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,20 +12,40 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-use App\Repository\ArticleRepository;
-use App\Repository\MessageRepository;
+use App\Service\AutoPaginationService;
 
 class ArticleController extends AbstractController
 {
-    #[Route('/article/{id}', name: 'app_article')]
+    private $em;
+    public function __construct(EntityManagerInterface $entityManager) {
+        $this->em = $entityManager;
+    }
+
+    #[Route('/articles', name: 'app_articles')]
     public function index(
-        int $id,
-        ArticleRepository $articleRepo
+        Request $request,
+        AutoPaginationService $pageService
         ): Response
     {
-        $article = $articleRepo->find($id);
+        $queryBuilder = $this->em->getRepository(Article::class)->createQueryBuilder('a');
+        $queryBuilder->orderBy("a.date", "DESC");
+
+        $pageInfo = $pageService->paginate(request: $request, queryBuilder: $queryBuilder, limit: 12);
 
         return $this->render('article/index.html.twig', [
+            'allArticles' => $pageInfo['items'],
+            'pageInfo' => $pageInfo
+        ]);
+    }
+
+    #[Route('/articles/{id}', name: 'show_article')]
+    public function show(
+        int $id
+        ): Response
+    {
+        $article = $this->em->getRepository(Article::class)->find($id);
+
+        return $this->render('article/show.html.twig', [
             'article' => $article,
         ]);
     }
@@ -32,14 +54,13 @@ class ArticleController extends AbstractController
     public function addComment(
         int $articleId,
         Request $request,
-        ArticleRepository $articleRepo,
         EntityManagerInterface $entityManager
         ): Response
     {
         $user = $this->getUser();
         if (!isset($user)) { return $this->redirectToRoute("app_login"); }
         
-        $article = $articleRepo->find($articleId);
+        $article = $this->em->getRepository(Article::class)->find($articleId);
         if (!isset($article)) { $this->redirectToRoute("app_home"); }
 
 
@@ -62,20 +83,19 @@ class ArticleController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $articleId]);
+        return $this->redirectToRoute(route: "show_article", parameters: ["id"=> $articleId]);
     }
 
     #[Route('/like/article/{id}', name: 'like_article', methods: ["POST"])]
     public function likeArticle(
         int $id,
-        ArticleRepository $articleRepo,
         EntityManagerInterface $entityManager
         ): Response
     {
         $user = $this->getUser();
 
         if (isset($user)) {
-            $article = $articleRepo->find($id);
+            $article = $this->em->getRepository(Article::class)->find($id);
 
             if ($user->getLikedArticle()->contains($article)) {
                 $user->removeLikedArticle($article);
@@ -87,21 +107,19 @@ class ArticleController extends AbstractController
         } else {
             return $this->redirectToRoute("app_login");
         }
-        return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $id]);
+        return $this->redirectToRoute(route: "show_article", parameters: ["id"=> $id]);
     }
 
     #[Route('/like/comment/{id}/{commentId}', name: 'like_article_comment', methods: ["POST"])]
     public function likeComment(
         int $id,
-        int $commentId,
-        MessageRepository $messageRepo,
-        EntityManagerInterface $entityManager
+        int $commentId
         ): Response
     {
         $user = $this->getUser();
 
         if (isset($user)) {
-            $comment = $messageRepo->find($commentId);
+            $comment = $this->em->getRepository(Message::class)->find($commentId);
 
             if ($user->getLikedMessages()->contains($comment)) {
                 $user->removeLikedMessage($comment);
@@ -109,10 +127,10 @@ class ArticleController extends AbstractController
                 $user->addLikedMessage($comment);
             }
 
-            $entityManager->flush();
+            $this->em->flush();
         } else {
             return $this->redirectToRoute("app_login");
         }
-        return $this->redirectToRoute(route: "app_article", parameters: ["id"=> $id]);
+        return $this->redirectToRoute(route: "show_article", parameters: ["id"=> $id]);
     }
 }
