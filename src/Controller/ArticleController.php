@@ -119,7 +119,7 @@ class ArticleController extends AbstractController
         $user = $this->getUser();
 
         if (isset($user)) {
-            $comment = $this->em->getRepository(Message::class)->find($id);
+            $comment = $this->em->getRepository(Message::class)->find($commentId);
 
             if ($user->getLikedMessages()->contains($comment)) {
                 $user->removeLikedMessage($comment);
