@@ -1,0 +1,24 @@
+{#
+Example Variables (in parent twig):
+hasLiked = article in app.user.likedArticle
+actionPath = path('like_article', {id: article.getId()})
+#}
+
+{% if is_granted("ROLE_USER") %}
+    <form method="POST" action="{{ actionPath }}" class="flex flex-col xl:flex-row xl:gap-3 w-full">
+        <button type="submit" class="self-center xl:self-start
+            {{ hasLiked ? 'fill-secondary hover:fill-none stroke-secondary' : 'fill-none hover:fill-primary stroke-primary' }}
+        ">
+            <svg width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.16658 10.3333V23.6666M7.16658 10.3333L1.83325 10.3333V23.6666H7.16658M7.16658 10.3333L14.094 2.25125C14.7514 1.48436 15.7855 1.15468 16.7655 1.39965L16.8288 1.41551C18.6179 1.86277 19.4238 3.94739 18.401 5.48176L15.1666 10.3333H21.2471C22.9299 10.3333 24.192 11.8728 23.862 13.5229L22.262 21.5229C22.0127 22.7694 20.9183 23.6666 19.6471 23.6666H7.16658" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </form>
+{% else %}
+    <div class="flex flex-col xl:flex-row xl:gap-3 w-full">
+        <svg class="fill-slate-400 stroke-none self-center xl:self-start" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.16658 10.3333V23.6666M7.16658 10.3333L1.83325 10.3333V23.6666H7.16658M7.16658 10.3333L14.094 2.25125C14.7514 1.48436 15.7855 1.15468 16.7655 1.39965L16.8288 1.41551C18.6179 1.86277 19.4238 3.94739 18.401 5.48176L15.1666 10.3333H21.2471C22.9299 10.3333 24.192 11.8728 23.862 13.5229L22.262 21.5229C22.0127 22.7694 20.9183 23.6666 19.6471 23.6666H7.16658" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="self-center xl:self-start italic"><a class="text-accent font-semibold underline" href="{{ path('app_login') }}">Connectez</a>-vous pour aimer.</p>
+    </div>
+{% endif %}

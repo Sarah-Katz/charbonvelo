@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Bundle\SecurityBundle\Security;
 
 #[AdminDashboard(routes: [
@@ -45,7 +46,7 @@ class MessageCrudController extends AbstractCrudController
                 AssociationField::new('author', 'Auteur'),
                 AssociationField::new('subject', 'Sujet'),
                 AssociationField::new('article', 'Article'),
-                TextEditorField::new('content', 'Contenu'),
+                TextField::new('content', 'Contenu'),
                 DateTimeField::new('date', 'Date'),
             ];
         }
@@ -58,7 +59,7 @@ class MessageCrudController extends AbstractCrudController
             AssociationField::new('article', 'Article')
                 ->setFormTypeOption('choice_label', 'title') // Assure-toi que 'name' est le champ de l'entité Category à afficher
                 ->setRequired(false),
-            TextEditorField::new('content', 'Contenu'),
+            TextField::new('content', 'Contenu'),
         ];
     }
 

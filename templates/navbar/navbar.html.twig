@@ -1,63 +1,49 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Navbar Responsive</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+<!-- Navbar principale -->
+<nav class="bg-white shadow-md px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between w-screen max-w-screen mx-auto">
+  <!-- Logo -->
+  <div class="flex items-center space-x-2">
+    <a href="/"><img src="{{asset('images/Logo_Velo_charbon.png')}}" alt="Logo" class="h-8 w-8 sm:h-12 sm:w-12 max-w-screen" /></a>
+    <span class="hidden md:inline text-lg font-bold text-secondary">La Vélocharbon</span>
+  </div>
 
-  <body class="bg-gray-100">
-    <!-- Navbar principale -->
-    <nav class="bg-white shadow-md px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between w-screen max-w-screen mx-auto">
-      <!-- Logo -->
-      <div class="flex items-center space-x-2">
-        <a href="/">
-          <img src="images/Logo_Velo_charbon.png" alt="Logo" class="h-8 w-8 sm:h-12 sm:w-12 max-w-screen" />
-        </a>
-        <span class="hidden md:inline text-lg font-bold text-secondary">La Vélocharbon</span>
-      </div>
+  <!-- Liens desktop uniquement -->
+  <ul class="hidden md:flex space-x-6 text-sm font-medium text-primary">
+    <li>
+      <a href="{{path('app_forum')}}" class="hover:text-accent">Forum</a>
+    </li>
+    <li>
+      <a href="#" class="hover:text-accent">Actualités</a>
+    </li>
+    <li>
+      <a href="{{path('app_map')}}" class="hover:text-accent">Itinéraires</a>
+    </li>
+  </ul>
 
-      <!-- Liens desktop uniquement -->
-      <ul class="hidden md:flex space-x-6 text-sm font-medium text-primary">
-        <li>
-          <a href="#" class="hover:text-accent">Forum</a>
-        </li>
-        <li>
-          <a href="#" class="hover:text-accent">Actualités</a>
-        </li>
-        <li>
-          <a href="#" class="hover:text-accent">Itinéraires</a>
-        </li>
-      </ul>
+  <!-- Boutons -->
+  <div class="flex space-x-4">
+    {% if is_granted('ROLE_ADMIN') %}
+      <a href="{{ path('admin') }}" class="hidden md:inline-block px-3 py-1 text-sm font-medium text-white bg-secondary rounded-full shadow-lg hover:bg-accent">Panel Admin</a>
+    {% endif %}
 
-      <!-- Boutons -->
-      <div class="flex space-x-4">
-        {% if is_granted('ROLE_ADMIN') %}
-          <a href="{{ path('admin') }}" class="hidden md:inline-block px-3 py-1 text-sm font-medium text-white bg-secondary rounded-full shadow-lg hover:bg-accent">Panel Admin</a>
-        {% endif %}
+    {% if app.user %}
+      <a href="{{ path('app_logout') }}" class="px-3 py-1 text-sm font-medium text-white bg-accent rounded-full shadow-lg hover:bg-secondary">Se déconnecter</a>
+    {% else %}
+      <a href="{{ path('app_login') }}" class="px-3 py-1 text-sm font-medium text-white bg-secondary rounded-full shadow-lg hover:bg-accent">Se connecter</a>
+    {% endif %}
+  </div>
+</nav>
 
-        {% if app.user %}
-          <a href="{{ path('app_logout') }}" class="px-3 py-1 text-sm font-medium text-white bg-accent rounded-full shadow-lg hover:bg-secondary">Se déconnecter</a>
-        {% else %}
-          <a href="{{ path('app_login') }}" class="px-3 py-1 text-sm font-medium text-white bg-secondary rounded-full shadow-lg hover:bg-accent">Se connecter</a>
-        {% endif %}
-      </div>
-    </nav>
-
-    <!-- Seconde Navbar (mobile uniquement) -->
-    <div class="bg-primary md:hidden w-full">
-      <ul class="flex justify-around py-2 text-xs font-medium text-white">
-        <li>
-          <a href="#" class="hover:text-accent">Forum</a>
-        </li>
-        <li>
-          <a href="#" class="hover:text-accent">Actualités</a>
-        </li>
-        <li>
-          <a href="#" class="hover:text-accent">Itinéraires</a>
-        </li>
-      </ul>
-    </div>
-  </body>
-</html>
+<!-- Seconde Navbar (mobile uniquement) -->
+<div class="bg-primary md:hidden w-full">
+  <ul class="flex justify-around py-2 text-xs font-medium text-white">
+    <li>
+      <a href="{{path('app_forum')}}" class="hover:text-accent">Forum</a>
+    </li>
+    <li>
+      <a href="#" class="hover:text-accent">Actualités</a>
+    </li>
+    <li>
+      <a href="{{path('app_map')}}" class="hover:text-accent">Itinéraires</a>
+    </li>
+  </ul>
+</div>
