@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Entity\Image;
 use App\Entity\Message;
 use App\Entity\Stage;
 use App\Entity\Subject;
@@ -28,7 +29,7 @@ class DashboardController extends AbstractDashboardController
         $this->router = $router;
     }
 
-    #[Route('/admin', name: 'admin')]
+    #[Route('/QW50b2luZUFWZWxv', name: 'admin')]
     public function index(): Response
     {
         return $this->render('admin/dashboard.html.twig', [
@@ -55,5 +56,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Stage', 'fas fa-road', Stage::class);
         yield MenuItem::linkToCrud('Subject', 'fas fa-envelope', Subject::class);
         yield MenuItem::linkToCrud('Users', 'fas fa-users', User::class);
+        yield MenuItem::linkToCrud('Image', 'fas fa-image', Image::class);
     }    
 }
