@@ -12,7 +12,7 @@
 {% block body %}
   <div class="container w-full">
     {% if sliderImages is empty %}
-      {# Could do stuff here if needed #}
+      {# Vous pouvez ajouter un message ou une alternative ici si nécessaire #}
     {% else %}
       <div class="relative w-screen overflow-hidden">
         <!-- Slides -->
@@ -35,17 +35,25 @@
       </div>
     {% endif %}
   </div>
+
   <!-- Section Titre principal et description -->
   <div class="py-4 md:py-6 lg:py-8 px-8 md:px-20 lg:px-32 flex flex-col items-center">
-    <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-primary text-center">La Vélocharbon, les trajets des Hauts-de-France à vélo</h1>
-    <p class="text-gray-600 mt-4 text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam. Vivamus et vehicula eros tristique lacus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam. Vivamus et vehicula eros tristique lacus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam. Vivamus et vehicula eros tristique lacus.Vivamus et vehicula eros tristique lacus.</p>
-    <p class="text-gray-600 mt-2">Natus id id sint illum. Pellentesque tristique facilisis libero, non accumsan arcu vehicula sit amet. Ut at magna eget ligula dignissim congue. Donec a ipsum quis arcu efficitur.Vivamus et vehicula eros tristique lacus.Vivamus et vehicula eros tristique lacus.</p>
+    <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-primary text-center">
+      {{ config.block1Title|striptags|replace({'&nbsp;': ''})|trim|default('Titre principal par défaut') }}
+    </h1>
+    <p class="text-gray-600 mt-4 text-justify">
+      {{ config.block1Text|striptags|replace({'&nbsp;': ''})|trim|default('Description par défaut du bloc 1.') }}
+    </p>
   </div>
 
   <!-- Section Actualités -->
   <div class="py-4 md:py-6 lg:py-8 px-8 md:px-20 lg:px-32 flex flex-col items-center">
-    <h2 class="text-lg md:text-xl lg:text-2xl font-bold text-primary mb-4 text-center">Actualités</h2>
-    <p class="text-gray-600 text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas euismod enim a metus faucibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis non velit eu aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.</p>
+    <h2 class="text-lg md:text-xl lg:text-2xl font-bold text-primary mb-4 text-center">
+      {{ config.block2Title|striptags|replace({'&nbsp;': ''})|trim|default('Actualités') }}
+    </h2>
+    <p class="text-gray-600 text-justify">
+      {{ config.block2Text|striptags|replace({'&nbsp;': ''})|trim|default('Description par défaut des actualités.') }}
+    </p>
   </div>
 
   <!-- Photos Miniatures -->
@@ -62,9 +70,15 @@
 
   <!-- Section Carte et itinéraire -->
   <div class="py-4 md:py-6 lg:py-8 px-8 md:px-20 lg:px-32 flex flex-col items-center">
-    <h2 class="text-lg md:text-xl lg:text-2xl font-bold text-primary m-4 text-center">Itinéraire</h2>
-    <p class="text-gray-600 mb-6 text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id arcu et metus dapibus auctor sed vitae justo.</p>
+    <h2 class="text-lg md:text-xl lg:text-2xl font-bold text-primary m-4 text-center">
+      {{ config.block3Title|striptags|replace({'&nbsp;': ''})|trim|default('Carte et itinéraire') }}
+    </h2>
+    <p class="text-gray-600 mb-6 text-justify">
+      {{ config.block3Text|striptags|replace({'&nbsp;': ''})|trim|default('Description par défaut pour la section itinéraire.') }}
+    </p>
     <!-- Image de la Carte -->
-    <a href="{{ path('app_map') }}"><img src="{{ asset('images/map.png') }}" class="object-cover mx-auto" alt="Carte de l'itinéraire" /></a>
+    <a href="{{ path('app_map') }}">
+      <img src="{{ asset('images/map.png') }}" class="object-cover mx-auto" alt="Carte de l'itinéraire" />
+    </a>
   </div>
 {% endblock %}
