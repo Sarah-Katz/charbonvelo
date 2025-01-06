@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Entity\Config;
 use App\Entity\Image;
 use App\Entity\Message;
 use App\Entity\Stage;
@@ -50,6 +51,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section();
         
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToCrud('Config', 'fas fa-bicycle', Config::class);
         yield MenuItem::linkToCrud('Article', 'fas fa-newspaper', Article::class);
         yield MenuItem::linkToCrud('Category', 'fas fa-bars', Category::class);
         yield MenuItem::linkToCrud('Message', 'fas fa-message', Message::class);

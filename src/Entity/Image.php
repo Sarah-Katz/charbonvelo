@@ -98,12 +98,12 @@ class Image
         return $this;
     }
 
-    public function isOnSlider(): ?bool
+    public function getIsOnSlider(): ?bool
     {
         return $this->isOnSlider;
     }
 
-    public function setOnSlider(bool $isOnSlider): static
+    public function setIsOnSlider(bool $isOnSlider): static
     {
         $this->isOnSlider = $isOnSlider;
 
