@@ -9,17 +9,16 @@
 
 {% block body %}
 <div class="container w-full">
-    <div class="relative w-screen overflow-hidden"> <!-- Remplacez w-full par w-screen -->
+  {% if sliderImages is empty %}
+    {# Could do stuff here if needed #}
+  {% else %}
+    <div class="relative w-screen overflow-hidden">
       <!-- Slides -->
-      <div class="mySlides">
-        <img src="{{ asset('images/article.webp') }}" class="w-screen object-cover h-[400px]" alt="Article Image" />
-      </div>
-      <div class="mySlides hidden">
-        <img src="{{ asset('images/biking_road.jpg') }}" class="w-screen object-cover h-[400px]" alt="Biking Road" />
-      </div>
-      <div class="mySlides hidden">
-        <img src="https://img.oastatic.com/img2/48571960/max/variant.jpg" class="w-screen object-cover h-[400px]" alt="Landscape Image" />
-      </div>
+      {% for sliderImage in sliderImages %}
+          <div class="mySlides">
+            <img src="{{ asset(sliderImage.getPath()) }}" class="w-screen object-cover h-[460px]" alt="{{ sliderImage.getAlt() }}" />
+          </div>
+      {% endfor %}
 
       <!-- Next and Previous Buttons -->
       <button
@@ -37,12 +36,12 @@
 
       <!-- Dots -->
       <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3">
-        <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
-        <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
-        <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
+        {% for _ in 0..sliderImages|length-1 %}
+          <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
+        {% endfor %}
       </div>
     </div>
-</div>
+  {% endif %}
 <!-- Section Titre principal et description -->
     <div class="py-4 md:py-6 lg:py-8 px-8 md:px-20 lg:px-32 flex flex-col items-center">
         <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-primary text-center">La Vélocharbon, les trajets des Hauts-de-France à vélo</h1>
