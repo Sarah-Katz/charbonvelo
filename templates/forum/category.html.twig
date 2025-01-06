@@ -8,7 +8,10 @@
   <div class="container mx-auto my-4 px-4 py-8">
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-primary text-3xl font-bold">Catégorie > {{ category.title }}</h1>
-      <a href="{{ path('app_forum') }}" class="bg-secondary hover:bg-primary text-white font-bold py-2 px-4 rounded-full">Retour aux catégories</a>
+      <div class="flex gap-4">
+        <a href="{{ path('app_subject_new', { id: category.id }) }}" class="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded-full">Nouveau sujet</a>
+        <a href="{{ path('app_forum') }}" class="bg-secondary hover:bg-primary text-white font-bold py-2 px-4 rounded-full">Retour aux catégories</a>
+      </div>
     </div>
     <div class="bg-white shadow rounded-lg px-4">
       <ul class="divide-y divide-gray-200 cursor-pointer">
