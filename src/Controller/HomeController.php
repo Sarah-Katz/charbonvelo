@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Config;
 use App\Entity\Image;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,11 +22,13 @@ class HomeController extends AbstractController
     {
         $sliderImages = $this->em->getRepository(Image::class)->findBy(['isOnSlider' => true]);
         $latestArticles = $articleRepository->findBy([], ['date' => 'DESC'], 6);
-
+        $config = $this->em->getRepository(Config::class)->findOneBy([]);
+    
         return $this->render('home.html.twig', [
-            'controller_name' => 'HomeController',
             'latestArticles' => $latestArticles,
-            'sliderImages' => $sliderImages
+            'sliderImages' => $sliderImages,
+            'config' => $config,
         ]);
     }
+    
 }
