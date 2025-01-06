@@ -9,7 +9,7 @@
 
 {% block body %}
 <div class="container w-full">
-    <div class="relative w-screen overflow-hidden"> <!-- Remplacez w-full par w-screen -->
+    <div class="relative w-screen overflow-hidden">
       <!-- Slides -->
       {% for sliderImage in sliderImages %}
           <div class="mySlides">
@@ -33,12 +33,9 @@
 
       <!-- Dots -->
       <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3">
-        {% for _ in sliderImages %}
+        {% for _ in 0..sliderImages|length-1 %}
           <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
         {% endfor %}
-        {# <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
-        <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button>
-        <button class="dot bg-secondary cursor-pointer inline-block w-4 h-4 rounded-full"></button> #}
       </div>
     </div>
 </div>
