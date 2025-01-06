@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Message;
 use App\Entity\Subject;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +18,8 @@ class SubjectController extends AbstractController
     {
     }
 
+    // Subject methods
+
     #[Route('/subject/{id}', name: 'app_subject_show')]
     public function showSubject(int $id): Response
     {
@@ -27,6 +30,37 @@ class SubjectController extends AbstractController
             'subject'         => $subject,
         ]);
     }
+
+    #[Route('/subject/{id}/new', name: 'app_subject_new', methods: ['GET', 'POST'])]
+    public function newSubject(int $id, Request $request): Response
+    {
+        if ($request->isMethod('POST')) {
+            $subject = new Subject();
+            $message = new Message();
+
+            $subject->setTitle($request->request->get('title'));
+            $subject->setCategory($this->em->getRepository(Category::class)->find($id));
+            $this->em->persist($subject);
+
+
+            $message->setAuthor($this->getUser());
+            $message->setContent($request->request->get('content'));
+            $message->setSubject($subject);
+            $this->em->persist($message);
+
+            $this->em->flush();
+
+            return $this->redirectToRoute('app_subject_show', ['id' => $subject->getId()]);
+        }
+
+        return $this->render('subject/new.html.twig', [
+            'controller_name' => 'SubjectController',
+            'id'              => $id,
+        ]);
+    }
+
+
+    // Messages Methods
 
     #[Route('/subject/{id}/newMessage', name: 'app_message_new', methods: ['POST'])]
     public function newMessage(int $id, Request $request): Response
