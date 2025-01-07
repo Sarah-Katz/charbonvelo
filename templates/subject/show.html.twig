@@ -13,7 +13,11 @@
 
     <div class="space-y-6">
       {% for message in subject.messages %}
-        {{ include('components/message.html.twig', { message: message, actionPath: path('like_subject_message', { id: message.id }) }) }}
+          {{ include('components/message.html.twig', { 
+              message: message, 
+              actionPath: path('like_subject_message', { id: message.id }),
+              isFirstMessage: loop.first
+          }) }}
       {% endfor %}
     </div>
 
