@@ -1,45 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Articles | Vélocharbon{% endblock %}
+{% block title %}
+  Articles | Vélocharbon
+{% endblock %}
 
 {% block body %}
-<div class="lg:p-8 p-6 text-text text-base">
-{# All articles #}
-
-{% if allArticles|length > 0 %}
-    <p class="italic text-slate-500">{{ allArticles|length }} article(s) sur {{ pageInfo["totalItems"] }}</p>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-[125em] mx-auto">
-    {% for article in allArticles %}
-        {% set image = article.getImage() %}
-        <a href="{{ path('show_article', {'id': article.getId()}) }}"
-            class="lg:m-3 m-2 scale-100
-            bg-background hover:bg-white
-            rounded-lg overflow-clip drop-shadow-sm
-            border-slate-50 border-solid border-x border-y
-            hover:scale-105 transition-all duration-500 ease-in-out"
-        >
-            <div title="{{ image.getAlt() }}" class="h-64 w-full bg-[url('{{ asset(image.getPath()) }}')] bg-cover bg-center"></div>
-            <div class="w-full xl:p-4 p-3
-                flex flex-col justify-center gap-1
-                transition-all duration-500 ease-in-out"
-            >
-                <p class="text-primary font-semibold text-xl text-center">{{ article.getTitle() }}</p>
-                
-                <div class="flex flex-col w-full lg:flex-row items-end justify-center gap-3 text-sm">
-                    <p>{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date("d/m/Y H:i") }}</p>
-                    <p>{{ article.getHasLiked()|length }} j'aime(s)</p>
-                </div>
-            </div>
-        </a>
-    {% endfor %}
+  <div class="lg:p-8 p-6 text-text text-base">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-primary text-3xl font-bold">Liste des articles</h1>
+      {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('add_article') }}" class="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded-full">Ajouter un article</a>
+      {% endif %}
     </div>
 
-    {{ include( "components/pagination.html.twig", {"pathName": "app_articles", "pageInfo": pageInfo} ) }}
+    {# All articles #}
+    {% if (allArticles|length) > 0 %}
+      <p class="italic text-slate-500">{{ allArticles|length }} article(s) sur {{ pageInfo['totalItems'] }}</p>
 
-{% else %}
-    <p class="text-gray-600">Aucun article pour l'instant...</p>
-{% endif %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-[125em] mx-auto">
+        {% for article in allArticles %}
+          {% set image = article.getImage() %}
+          <a href="{{ path('show_article', { id: article.getId() }) }}" class="lg:m-3 m-2 scale-100 bg-background hover:bg-white rounded-lg overflow-clip drop-shadow-sm border-slate-50 border-solid border-x border-y hover:scale-105 transition-all duration-500 ease-in-out">
+            <div title="{{ image.getAlt() }}" class="h-64 w-full bg-[url('{{ asset(image.getPath()) }}')] bg-cover bg-center"></div>
+            <div class="w-full xl:p-4 p-3 flex flex-col justify-center gap-1 transition-all duration-500 ease-in-out">
+              <p class="text-primary font-semibold text-xl text-center">{{ article.getTitle() }}</p>
 
-</div>
+              <div class="flex flex-col w-full lg:flex-row items-end justify-center gap-3 text-sm">
+                <p>{{ article.getAuthor().getUsername() }} - {{ article.getDate()|date('d/m/Y H:i') }}</p>
+                <p>{{ article.getHasLiked()|length }} j'aime(s)</p>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+
+      {{ include('components/pagination.html.twig', { pathName: 'app_articles', pageInfo: pageInfo }) }}
+    {% else %}
+      <p class="text-gray-600">Aucun article pour l'instant...</p>
+    {% endif %}
+  </div>
 {% endblock %}
