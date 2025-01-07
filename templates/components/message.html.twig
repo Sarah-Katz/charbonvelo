@@ -10,8 +10,25 @@ Parameters:
 
 <div class="rounded-lg p-4 bg-background drop-shadow-lg flex flex-col gap-1">
     <div class="flex flex-col lg:flex-row lg:items-center gap-4">
-        <p class="text-primary font-semibold text-xl">{{ message.getAuthor().getUsername() }}</p>
-        <p class="text-xs">{{ message.getDate()|date("d/m/Y H:i") }}</p>
+        <div class="flex flex-row justify-between w-full">
+            <div class="flex flex-col md:flex-row gap-1 md:gap-4 md:items-center">
+                <p class="text-primary font-semibold text-xl">{{ message.getAuthor().getUsername() }}</p>
+                <p class="text-xs text-center">{{ message.getDate()|date("d/m/Y H:i") }}</p>
+            </div>
+
+            {# Action buttons #}
+            <div class="flex flex-row">
+                {# Edit button #}
+                <a href="{{ path('mod_edit_message', {'id': message.getId()}) }}">
+                    <img class="w-7 h-7" src="{{ asset('icons/edit_pencil.svg') }}"/>
+                </a>
+
+                {# Delete button #}
+                <a href="{{ path('mod_delete_message', {'id': message.getId()}) }}">
+                    <img class="w-7 h-7" src="{{ asset('icons/delete.svg') }}"/>
+                </a>
+            </div>
+        </div>
     </div>
     <p class=>{{ message.getContent() }}</p>
 
