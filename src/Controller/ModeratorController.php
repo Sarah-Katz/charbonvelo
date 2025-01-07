@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+// TODO: Make users also be able to edit and delete their own messages
 #[Route('/moderator')]
 #[IsGranted("ROLE_MODERATOR")]
 class ModeratorController extends AbstractController
@@ -30,12 +31,14 @@ class ModeratorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // We save the message
             $this->em->flush();
-            $this->addFlash("success", "Message modifié avec succès");
+            $this->addFlash("success",
+                "Message #".$message->getId()." a été modifié par ".$this->getUser()->getUsername()."#".$this->getUser()->getId()." avec succès"
+            );
 
             return $this->redirectMessage($message);
         }
 
-        return $this->render('moderator/edit.html.twig', [
+        return $this->render('moderator/edit_message.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -47,7 +50,9 @@ class ModeratorController extends AbstractController
         $this->em->remove($message);
         $this->em->flush();
 
-        $this->addFlash("success", "Message supprimé avece succès");
+        $this->addFlash("success",
+            "Message #".$message->getId()." a été suprimmé par ".$this->getUser()->getUsername()."#".$this->getUser()->getId()." avec succès"
+        );
         return $this->redirectMessage($message);
     }
 
