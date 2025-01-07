@@ -16,18 +16,20 @@ Parameters:
                 <p class="text-xs text-center">{{ message.getDate()|date("d/m/Y H:i") }}</p>
             </div>
 
-            {# Action buttons #}
-            <div class="flex flex-row">
-                {# Edit button #}
-                <a href="{{ path('mod_edit_message', {'id': message.getId()}) }}">
-                    <img class="w-7 h-7" src="{{ asset('icons/edit_pencil.svg') }}"/>
-                </a>
+            {% if is_granted('ROLE_MODERATOR') or message.getAuthor() == app.user %}
+                {# Action buttons #}
+                <div class="flex flex-row">
+                    {# Edit button #}
+                    <a href="{{ path('mod_edit_message', {'id': message.getId()}) }}">
+                        <img class="w-7 h-7" src="{{ asset('icons/edit_pencil.svg') }}"/>
+                    </a>
 
-                {# Delete button #}
-                <a href="{{ path('mod_delete_message', {'id': message.getId()}) }}">
-                    <img class="w-7 h-7" src="{{ asset('icons/delete.svg') }}"/>
-                </a>
-            </div>
+                    {# Delete button #}
+                    <a href="{{ path('mod_delete_message', {'id': message.getId()}) }}">
+                        <img class="w-7 h-7" src="{{ asset('icons/delete.svg') }}"/>
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </div>
     <p class=>{{ message.getContent() }}</p>
